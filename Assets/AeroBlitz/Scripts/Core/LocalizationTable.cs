@@ -353,6 +353,40 @@ namespace AeroBlitz
             A("paint.orange", "Naranja", "Orange", "Orange");
             A("paint.purple", "Púrpura", "Purple", "Violet");
             A("paint.gold", "Oro Legendario", "Legendary Gold", "Or Légendaire");
+            A("paint.neon", "Neón Magenta", "Neon Magenta", "Magenta Néon");
+            A("paint.toxic", "Lima Tóxica", "Toxic Lime", "Citron Toxique");
+            A("paint.midnight", "Azul Medianoche", "Midnight Blue", "Bleu Minuit");
+            A("paint.ruby", "Rubí", "Ruby", "Rubis");
+            A("hangar.weekly_paint", "Misión semanal", "Weekly mission", "Mission hebdo");
+            A("toast.weekly_paint_hint", "Esta pintura se gana con la misión semanal", "Earn this paint with the weekly mission", "Gagne cette peinture avec la mission hebdo");
+
+            // ---------------- MISIONES ----------------
+            A("menu.missions", "MISIONES", "MISSIONS", "MISSIONS");
+            A("mis.title", "Misiones", "Missions", "Missions");
+            A("mis.daily_fmt", "Diarias · se renuevan en {0}", "Daily · new in {0}", "Quotidiennes · nouvelles dans {0}");
+            A("mis.weekly_fmt", "Semanal · termina en {0}", "Weekly · ends in {0}", "Hebdo · se termine dans {0}");
+            A("mis.drones_fmt", "Destruye {0} drones", "Destroy {0} drones", "Détruis {0} drones");
+            A("mis.nodamage_fmt", "Completa {0} niveles sin recibir daño", "Clear {0} levels without taking damage", "Termine {0} niveaux sans subir de dégâts");
+            A("mis.coins_fmt", "Recoge {0} monedas en los niveles", "Collect {0} coins in levels", "Ramasse {0} pièces dans les niveaux");
+            A("mis.asteroids_fmt", "Destruye {0} asteroides", "Destroy {0} asteroids", "Détruis {0} astéroïdes");
+            A("mis.levels_fmt", "Completa {0} niveles", "Clear {0} levels", "Termine {0} niveaux");
+            A("mis.reward_fmt", "Premio: {0}", "Reward: {0}", "Récompense : {0}");
+            A("mis.rw_coins_fmt", "{0} monedas", "{0} coins", "{0} pièces");
+            A("mis.rw_life", "1 vida", "1 life", "1 vie");
+            A("mis.rw_chest", "Cofre sorpresa", "Mystery chest", "Coffre surprise");
+            A("mis.rw_weekly_fmt", "Pintura exclusiva {0} + {1} monedas", "Exclusive {0} paint + {1} coins", "Peinture exclusive {0} + {1} pièces");
+            A("mis.progress_fmt", "{0} / {1}", "{0} / {1}", "{0} / {1}");
+            A("mis.claim", "RECLAMAR", "CLAIM", "RÉCUPÉRER");
+            A("mis.claimed", "RECLAMADO", "CLAIMED", "RÉCUPÉRÉ");
+            A("mis.in_progress", "EN CURSO", "IN PROGRESS", "EN COURS");
+            A("mis.done_fmt", "¡Misión completada! {0}", "Mission complete! {0}", "Mission accomplie ! {0}");
+            A("mis.level_done_fmt", "Misión completada: {0} (reclámala en Misiones)", "Mission complete: {0} (claim it in Missions)", "Mission accomplie : {0} (récupère-la dans Missions)");
+            A("mis.weekly_done_title", "¡Misión semanal completada!", "Weekly mission complete!", "Mission hebdo accomplie !");
+            A("mis.paint_unlocked_fmt", "Nueva pintura exclusiva: {0} (equípala en el Hangar)", "New exclusive paint: {0} (equip it in the Hangar)", "Nouvelle peinture exclusive : {0} (équipe-la au Hangar)");
+            A("mis.great", "¡GENIAL!", "AWESOME!", "GÉNIAL !");
+            A("chest.title", "¡Cofre abierto!", "Chest opened!", "Coffre ouvert !");
+            A("chest.upgrade_fmt", "Mejora gratis: {0} ({1})", "Free upgrade: {0} ({1})", "Amélioration gratuite : {0} ({1})");
+            A("time.days_fmt", "{0} d {1} h", "{0} d {1} h", "{0} j {1} h");
 
             // ---------------- PRODUCTOS (dinero real) ----------------
             A("prod.starter_pack", "Pack de Inicio", "Starter Pack", "Pack de Départ");

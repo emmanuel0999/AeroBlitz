@@ -297,11 +297,78 @@ namespace AeroBlitz
             });
         }
 
-        public void ShowLevelComplete(int level, int points, int coins, int destroyed, bool campaignDone, int pickupCoins = 0, string trialProductId = null)
+        // ---------------- MISIONES ----------------
+        /// <summary>Lista de misiones diarias y semanal con su progreso y el botón para reclamar el premio.</summary>
+        public void ShowMissions()
+        {
+            var gm = GameManager.Instance;
+            var d = gm.Data;
+            d.RefreshDaily();
+            Dialog(L.T("mis.title"), null, (p, close) =>
+            {
+                var daily = UIFactory.Label(p, "", 34, Palette.Cyan, TextAnchor.MiddleLeft, true);
+                daily.Pref(50);
+                daily.gameObject.AddComponent<LiveText>().source = () => L.T("mis.daily_fmt", FormatCountdown(Missions.DailyRemaining));
+                foreach (var s in d.dailyMissions) MissionRow(p, s, close);
+
+                var weekly = UIFactory.Label(p, "", 34, Palette.Purple, TextAnchor.MiddleLeft, true);
+                weekly.Pref(50);
+                weekly.gameObject.AddComponent<LiveText>().source = () => L.T("mis.weekly_fmt", FormatCountdown(Missions.WeeklyRemaining));
+                MissionRow(p, d.weeklyMission, close);
+
+                DialogButton(p, L.T("close"), Palette.Grey, null, close);
+            });
+        }
+
+        void MissionRow(RectTransform parent, MissionState s, Action close)
+        {
+            var gm = GameManager.Instance;
+            var def = Missions.Get(s.id);
+            if (def == null) return;
+            bool complete = Missions.IsComplete(s);
+
+            var row = UIFactory.Image(parent, Palette.PanelLight, true, "Mission");
+            row.Pref(250);
+            var title = FitLabel(row.transform, def.Title, 34, Palette.Text, true);
+            title.rectTransform.Place(0, 0.6f, 0.7f, 1, 26, 0, 0, 10);
+            var reward = FitLabel(row.transform, L.T("mis.reward_fmt", Missions.RewardText(def, gm.Data)), 28, Palette.Gold, false);
+            reward.rectTransform.Place(0, 0.35f, 0.7f, 0.6f, 26, 0, 0, 0);
+            var bar = UIFactory.Bar(row.transform, new Color(0, 0, 0, 0.5f), complete ? Palette.Green : Palette.Cyan);
+            ((RectTransform)bar.transform).Place(0, 0.08f, 0.7f, 0.32f, 26, 0, 0, 0);
+            bar.Set(s.progress / (float)def.target, L.T("mis.progress_fmt", s.progress, def.target));
+
+            string label = s.claimed ? L.T("mis.claimed") : complete ? L.T("mis.claim") : L.T("mis.in_progress");
+            var btn = UIFactory.Button(row.transform, label, complete && !s.claimed ? Palette.Green : Palette.Grey, () =>
+            {
+                close();
+                gm.ClaimMission(s, ShowMissions);
+            }, 34);
+            ((RectTransform)btn.transform).Place(0.72f, 0.22f, 1, 0.78f, 0, 0, 22, 0);
+            btn.interactable = complete && !s.claimed;
+        }
+
+        /// <summary>Texto que se encoge si no cabe (textos largos en francés o el premio semanal).</summary>
+        static Text FitLabel(Transform parent, string text, int size, Color color, bool bold)
+        {
+            var t = UIFactory.Label(parent, text, size, color, TextAnchor.MiddleLeft, bold);
+            t.resizeTextForBestFit = true;
+            t.resizeTextMaxSize = size;
+            t.resizeTextMinSize = 18;
+            t.verticalOverflow = VerticalWrapMode.Truncate;
+            return t;
+        }
+
+        /// <summary>"5:32:10", o "3 d 4 h" si falta más de un día.</summary>
+        static string FormatCountdown(TimeSpan t) =>
+            t.TotalHours >= 24 ? L.T("time.days_fmt", (int)t.TotalDays, t.Hours) : GameManager.FormatTime(t);
+
+        public void ShowLevelComplete(int level, int points, int coins, int destroyed, bool campaignDone, int pickupCoins = 0, string trialProductId = null, List<string> missionsDone = null)
         {
             var gm = GameManager.Instance;
             string body = L.T("dlg.complete_body_fmt", UIFactory.Fmt(points), UIFactory.Fmt(coins), destroyed);
             if (pickupCoins > 0) body += "\n" + L.T("dlg.pickup_coins_fmt", UIFactory.Fmt(pickupCoins));
+            if (missionsDone != null)
+                foreach (var m in missionsDone) body += "\n<color=#FFCC33>" + L.T("mis.level_done_fmt", m) + "</color>";
             if (campaignDone) body += "\n\n" + L.T("dlg.campaign_done");
             Dialog(L.T("dlg.complete_title_fmt", level), body, (p, close) =>
             {

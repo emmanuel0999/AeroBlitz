@@ -102,6 +102,12 @@ namespace AeroBlitz
         public bool dailyRewardClaimed;
         public bool vipLivesClaimed;
 
+        // Misiones: 3 diarias (se renuevan a medianoche) y 1 semanal (cada lunes). Ver Core/Missions.cs
+        public string missionsDate = "";
+        public List<MissionState> dailyMissions = new List<MissionState>();
+        public string weeklyKey = "";
+        public MissionState weeklyMission = new MissionState();
+
         // Ajustes
         public int language = -1;       // -1 = usar idioma del teléfono
         public bool soundOn = true;
@@ -146,6 +152,7 @@ namespace AeroBlitz
         /// <summary>Reinicia contadores diarios si cambió el día.</summary>
         public void RefreshDaily()
         {
+            Missions.Ensure(this); // va antes: las misiones se crean aunque los demás contadores ya sean de hoy
             string today = DateTime.Now.ToString("yyyy-MM-dd");
             if (dailyDate == today) return;
             dailyDate = today;

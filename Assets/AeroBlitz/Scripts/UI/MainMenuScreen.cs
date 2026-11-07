@@ -9,6 +9,7 @@ namespace AeroBlitz
         Text _player, _coins, _lives, _playLabel, _shipName, _vip;
         Image _shipImg;
         Button _daily;
+        GameObject _missionBadge;
         RectTransform _rankList, _content;
         Text _rankStatus;
         float _appliedInset = -1f;
@@ -54,6 +55,12 @@ namespace AeroBlitz
             UIFactory.Button(row, L.T("menu.hangar"), Palette.Cyan, () => UIManager.Instance.ShowScreen<HangarScreen>(), 42);
             UIFactory.Button(row, L.T("menu.store"), Palette.Purple, () => UIManager.Instance.ShowScreen<StoreScreen>(), 42);
             UIFactory.Button(row, L.T("menu.ranking"), Palette.Green, () => UIManager.Instance.ShowScreen<RankingScreen>(), 42);
+            var missions = UIFactory.Button(row, L.T("menu.missions"), Palette.Gold, () => UIManager.Instance.ShowMissions(), 42);
+            // Aviso rojo "!" cuando hay un premio de misión sin reclamar
+            var badge = UIFactory.Image(missions.transform, Palette.Red, true, "Badge");
+            ((RectTransform)badge.transform).Fixed(new Vector2(1, 1), new Vector2(14, 14), new Vector2(56, 56));
+            UIFactory.Label(badge.transform, "!", 40, Color.white, TextAnchor.MiddleCenter, true).rectTransform.Stretch();
+            _missionBadge = badge.gameObject;
 
             // Apartado de ranking en la pantalla de inicio
             var rankPanel = UIFactory.Image(_content, Palette.Panel, true, "RankPanel");
@@ -103,6 +110,7 @@ namespace AeroBlitz
 
         public override void OnShow()
         {
+            GameManager.Instance.Data.RefreshDaily(); // si pasó la medianoche con el juego abierto, misiones nuevas
             AdsManager.Instance.ShowBanner();
             LoadRanking();
         }
@@ -121,6 +129,7 @@ namespace AeroBlitz
             _vip.text = d.vip ? L.T("menu.vip") : "";
             _daily.interactable = GameManager.Instance.CanClaimDaily;
             _daily.SetLabel(L.T(GameManager.Instance.CanClaimDaily ? "menu.daily" : "menu.daily_tomorrow"));
+            _missionBadge.SetActive(GameManager.Instance.HasMissionReward);
         }
 
         /// <summary>"Vidas 2", o con cuenta regresiva de la recarga cuando está corriendo.</summary>

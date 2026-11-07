@@ -115,5 +115,13 @@ namespace AeroBlitz
         public const int VipDailyLives = 3;
         public const float VipCoinMultiplier = 2f;
         public const float ReviveHealthPercent = 0.5f;
+
+        // ---------------- MISIONES ----------------
+        // Objetivos y premios de cada misión: Core/Missions.cs
+        public const int ChestCoinsMin = 150, ChestCoinsMax = 400;   // el cofre siempre da monedas
+        public const float ChestLifeChance = 0.35f;                   // probabilidad de +1 vida
+        public const float ChestUpgradeChance = 0.15f;                // probabilidad de 1 nivel de mejora gratis
+        public const int ChestUpgradeFallbackCoins = 300;             // si la nave ya tiene todas las mejoras
+        public const int WeeklyAllPaintsBonus = 500;                  // extra si ya tiene todas las pinturas exclusivas
     }
 }

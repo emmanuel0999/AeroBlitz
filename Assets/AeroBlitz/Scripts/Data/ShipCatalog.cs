@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AeroBlitz
 {
-    public enum PriceType { Free, Coins, RealMoney }
+    public enum PriceType { Free, Coins, RealMoney, Mission }
 
     public class ShipDefinition
     {

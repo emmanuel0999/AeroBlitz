@@ -218,11 +218,14 @@ namespace AeroBlitz
                 bool ownedPaint = d.ownedPaints.Contains(p.id);
                 bool current = state.paintId == p.id;
                 string label = current ? L.T("hangar.in_use") : ownedPaint ? p.Name
-                    : p.priceType == PriceType.Coins ? $"$ {p.coinPrice}" : IAPManager.Instance.GetPrice(p.productId);
+                    : p.priceType == PriceType.Coins ? $"$ {p.coinPrice}"
+                    : p.priceType == PriceType.Mission ? L.T("hangar.weekly_paint")
+                    : IAPManager.Instance.GetPrice(p.productId);
                 var b = UIFactory.Button(grid, label, p.color * 0.8f + new Color(0, 0, 0, 1), () =>
                 {
                     if (d.ownedPaints.Contains(paint.id)) { state.paintId = paint.id; gm.Save(); gm.NotifyChanged(); }
                     else if (paint.priceType == PriceType.Coins) gm.BuyPaintWithCoins(paint);
+                    else if (paint.priceType == PriceType.Mission) UIManager.Instance.Toast(L.T("toast.weekly_paint_hint"));
                     else gm.BuyProduct(paint.productId);
                 }, 30);
                 if (current) b.gameObject.AddComponent<Outline>().effectDistance = new Vector2(5, 5);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AeroBlitz
@@ -11,6 +12,8 @@ namespace AeroBlitz
         public float healthPercent;
         public int pickupCoins;     // monedas recogidas durante el nivel
         public string trialProductId; // arma de pago que se probó en el nivel (o null)
+        public int coinPickups;       // cantidad de monedas recogidas (misiones)
+        public bool tookDamage;       // perdió vida durante el nivel (misiones)
     }
 
     /// <summary>
@@ -169,6 +172,18 @@ namespace AeroBlitz
             Data.totalPoints += points;
             Data.coins += coins;
             _lastEarnedCoins = coins;
+
+            // Misiones que dependen de superar el nivel
+            var missionsDone = new List<string>();
+            if (TrackMissions)
+            {
+                var done = new List<MissionDefinition>();
+                done.AddRange(Missions.Add(Data, MissionType.CollectCoins, r.coinPickups));
+                if (!r.tookDamage) done.AddRange(Missions.Add(Data, MissionType.NoDamageLevels, 1));
+                done.AddRange(Missions.Add(Data, MissionType.CompleteLevels, 1));
+                foreach (var m in done) missionsDone.Add(m.Title);
+            }
+
             bool campaignDone = r.level >= GameConfig.TotalLevels;
             if (!campaignDone && r.level == Data.currentLevel)
             {
@@ -183,7 +198,7 @@ namespace AeroBlitz
             NotifyChanged();
             AudioFX.Instance.Play(AudioFX.Sfx.Win);
 
-            UIManager.Instance.ShowLevelComplete(r.level, points, coins, r.destroyed, campaignDone, r.pickupCoins, r.trialProductId);
+            UIManager.Instance.ShowLevelComplete(r.level, points, coins, r.destroyed, campaignDone, r.pickupCoins, r.trialProductId, missionsDone);
             // Momento positivo: se pide valorar (solo en ciertos niveles y una vez en cada uno)
             PlatformServices.MaybeRequestReview(r.level);
         }
@@ -403,6 +418,53 @@ namespace AeroBlitz
                 Save(); NotifyChanged();
                 UIManager.Instance.Toast(L.T("toast.coins_fmt", GameConfig.RewardedCoinsAmount));
             });
+        }
+
+        // ---------------- MISIONES ----------------
+        /// <summary>Grabar el tráiler (solo en el Editor) no cuenta para las misiones.</summary>
+        static bool TrackMissions
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (TrailerCheats.Active) return false;
+#endif
+                return true;
+            }
+        }
+
+        /// <summary>Progreso que se suma durante la partida (drones y asteroides). Avisa si se completa una misión.</summary>
+        public void MissionEvent(MissionType type, int amount)
+        {
+            if (!TrackMissions) return;
+            foreach (var m in Missions.Add(Data, type, amount))
+            {
+                UIManager.Instance.Toast(L.T("mis.done_fmt", m.Title));
+                AudioFX.Instance.Play(AudioFX.Sfx.Upgrade);
+            }
+        }
+
+        public bool HasMissionReward => Missions.HasClaimable(Data);
+
+        /// <summary>Reclama el premio de una misión. El cofre y la semanal muestran lo ganado; after se llama al cerrar.</summary>
+        public void ClaimMission(MissionState s, Action after)
+        {
+            var def = Missions.Get(s.id);
+            var lines = Missions.Claim(Data, s);
+            if (def == null || lines.Count == 0) { after?.Invoke(); return; }
+            Save(); NotifyChanged();
+            AudioFX.Instance.Play(AudioFX.Sfx.Win);
+            if (def.reward == MissionReward.Chest || def.reward == MissionReward.WeeklyPaint)
+            {
+                string title = L.T(def.reward == MissionReward.Chest ? "chest.title" : "mis.weekly_done_title");
+                UIManager.Instance.Dialog(title, string.Join("\n", lines), (p, close) =>
+                    UIManager.DialogButton(p, L.T("mis.great"), Palette.Green, after, close));
+            }
+            else
+            {
+                UIManager.Instance.Toast(string.Join("  ", lines));
+                after?.Invoke();
+            }
         }
 
         public bool CanClaimDaily => !Data.dailyRewardClaimed || (Data.vip && !Data.vipLivesClaimed);

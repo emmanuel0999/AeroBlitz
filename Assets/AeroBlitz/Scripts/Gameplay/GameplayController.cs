@@ -49,6 +49,8 @@ namespace AeroBlitz
         public bool PickupsEnabled { get; private set; }
         /// <summary>Monedas recogidas en este nivel: solo se suman si se completa.</summary>
         public int RunCoins { get; private set; }
+        public int RunCoinPickups { get; private set; } // cantidad de monedas recogidas (para las misiones)
+        public bool TookDamage { get; private set; }     // perdió vida en este nivel (los escudos no cuentan)
         public float TempShieldTime { get; private set; }
 
         // Cañones y misiles (equipamiento de pago o prueba en partida desde el nivel 25)
@@ -134,7 +136,7 @@ namespace AeroBlitz
             ShieldHits = stats.shieldHits;
             Weapon.Setup(stats);
             _time = 0; _spawnTimer = 1.2f; _invuln = 1f; _revived = false;
-            Destroyed = 0; KillPoints = 0;
+            Destroyed = 0; KillPoints = 0; TookDamage = false;
             SetupPickups(level);
             SetupMissiles(stats.missiles);
 
@@ -301,7 +303,8 @@ namespace AeroBlitz
             if (_time >= _cfg.duration)
             {
                 State = RunState.Ended;
-                var r = new LevelResult { level = Level, destroyed = Destroyed, killPoints = KillPoints, healthPercent = Health / _stats.maxHealth, pickupCoins = RunCoins, trialProductId = TrialProductId };
+                var r = new LevelResult { level = Level, destroyed = Destroyed, killPoints = KillPoints, healthPercent = Health / _stats.maxHealth, pickupCoins = RunCoins, trialProductId = TrialProductId,
+                                          coinPickups = RunCoinPickups, tookDamage = TookDamage };
                 Stop();
                 State = RunState.Ended;
                 GameManager.Instance.OnLevelCompleted(r);
@@ -570,6 +573,7 @@ namespace AeroBlitz
                 ? LevelDatabase.BaseDamage(o.type) * _cfg.damageMultiplier * (1f - _stats.damageReduction)
                 : _stats.maxHealth * GameConfig.IndestructibleDamageFor(Level);
             Health -= dmg;
+            TookDamage = true;
             _invuln = 1f;
             _shake = 0.35f;
             AudioFX.Instance.Play(AudioFX.Sfx.Hit);
@@ -584,6 +588,13 @@ namespace AeroBlitz
                 State = RunState.Dying;
                 _dyingTimer = 1.2f;
             }
+        }
+
+        /// <summary>Drones y asteroides destruidos suman a las misiones en el momento (cuentan aunque luego se pierda el nivel).</summary>
+        static void CountForMissions(ObstacleType t)
+        {
+            if (t == ObstacleType.Drone) GameManager.Instance.MissionEvent(MissionType.DestroyDrones, 1);
+            else if (t == ObstacleType.SmallAsteroid || t == ObstacleType.BigAsteroid) GameManager.Instance.MissionEvent(MissionType.DestroyAsteroids, 1);
         }
 
         void RemoveObstacle(int i, bool explode)
@@ -646,6 +657,7 @@ namespace AeroBlitz
                         {
                             Destroyed++;
                             KillPoints += LevelDatabase.PointsForDestroying(o.type);
+                            CountForMissions(o.type);
                             RemoveObstacle(j, true);
                         }
                         else AudioFX.Instance.Play(AudioFX.Sfx.Hit, 0.4f);
@@ -666,7 +678,7 @@ namespace AeroBlitz
         void SetupPickups(int level)
         {
             PickupsEnabled = level >= GameConfig.PickupsFromLevel;
-            RunCoins = 0; TempShieldTime = 0; OverchargeTime = 0; MagnetTime = 0;
+            RunCoins = 0; RunCoinPickups = 0; TempShieldTime = 0; OverchargeTime = 0; MagnetTime = 0;
             TrialCannonTier = 0; TrialProductId = null; _trialPending = false;
             Weapon.ChargeRateMultiplier = 1f;
             if (!PickupsEnabled) return;
@@ -789,6 +801,7 @@ namespace AeroBlitz
             if (k.coin)
             {
                 RunCoins += _coinValue;
+                RunCoinPickups++;
                 AudioFX.Instance.Play(AudioFX.Sfx.Coin, 0.7f);
                 Explode(pos, new Color(1f, 0.85f, 0.3f), 6, 0.5f);
                 return;
@@ -947,6 +960,7 @@ namespace AeroBlitz
                     // El misil destruye cualquier obstáculo de un golpe, incluidos muros y minas
                     Destroyed++;
                     KillPoints += o.destructible ? LevelDatabase.PointsForDestroying(o.type) : 40;
+                    CountForMissions(o.type);
                     Explode(o.tr.position, new Color(1f, 0.6f, 0.2f), 26, 1.5f);
                     _shake = Mathf.Max(_shake, 0.2f);
                     RemoveObstacle(j, true);

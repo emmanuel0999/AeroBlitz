@@ -89,6 +89,11 @@ namespace AeroBlitz
             new PaintDefinition { id = "orange", color = new Color(1f, 0.6f, 0.2f), priceType = PriceType.Coins, coinPrice = 300 },
             new PaintDefinition { id = "purple", color = new Color(0.7f, 0.45f, 1f), priceType = PriceType.Coins, coinPrice = 500 },
             new PaintDefinition { id = "gold", color = new Color(1f, 0.84f, 0.25f), priceType = PriceType.RealMoney, productId = ProductIds.PaintGold },
+            // Exclusivas: solo se ganan con la misión semanal (orden en Missions.ExclusivePaints)
+            new PaintDefinition { id = "neon", color = new Color(1f, 0.3f, 0.85f), priceType = PriceType.Mission },
+            new PaintDefinition { id = "toxic", color = new Color(0.7f, 1f, 0.1f), priceType = PriceType.Mission },
+            new PaintDefinition { id = "midnight", color = new Color(0.35f, 0.42f, 1f), priceType = PriceType.Mission },
+            new PaintDefinition { id = "ruby", color = new Color(0.9f, 0.1f, 0.32f), priceType = PriceType.Mission },
         };
 
         public static PaintDefinition GetPaint(string id) => Paints.Find(x => x.id == id) ?? Paints[0];
