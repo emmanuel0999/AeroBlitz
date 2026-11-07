@@ -1,0 +1,77 @@
+# POLITIQUE DE CONFIDENTIALITÉ — AERO BLITZ
+
+Version 1 · En vigueur depuis le : 28 septembre 2026
+
+La présente Politique explique quelles données le jeu Aero Blitz (le « Jeu ») traite, à quelles fins, et quels sont tes droits. Le responsable du traitement est Emmanuel Rodriguez Ramirez, République dominicaine. Contact : frailescitystudios@gmail.com.
+
+# 1. Données traitées
+
+Données que tu nous fournis : le nom d'utilisateur (pseudo) et le pays que tu choisis en créant ton pilote. Merci de ne pas utiliser ton vrai nom ni des données personnelles comme nom d'utilisateur.
+
+Progression dans le jeu : niveau, points, pièces, vies, vaisseaux, améliorations, achats effectués dans le Jeu, langue et paramètres.
+
+Identifiants : un identifiant anonyme de joueur attribué par Unity Gaming Services. Si tu choisis de te connecter avec Google (Google Play Jeux), également un identifiant de ton compte Google Play Jeux. Nous ne recevons jamais ton mot de passe.
+
+Achats : traités par Google Play ou Apple. Nous recevons la confirmation de l'achat (produit et numéro de transaction), jamais tes données de paiement.
+
+Publicité : Unity LevelPlay et ses réseaux publicitaires partenaires peuvent collecter l'identifiant publicitaire de ton appareil, ton adresse IP, des données techniques de l'appareil et tes interactions avec les publicités, afin de les afficher, de les mesurer, de prévenir la fraude et, si tu l'autorises dans ta région, de les personnaliser.
+
+Données techniques : informations sur l'appareil et journaux d'erreurs utilisés par les services Unity pour faire fonctionner le Jeu et diagnostiquer les problèmes.
+
+# 2. Finalités
+
+Faire fonctionner le Jeu et enregistrer ta progression ; afficher le classement mondial et par pays ; sauvegarder ta progression dans le cloud si tu te connectes ; traiter et restaurer les achats ; afficher des publicités et attribuer les récompenses vidéo ; prévenir la triche et la fraude ; et respecter nos obligations légales.
+
+# 3. Base légale (utilisateurs de l'Espace économique européen et assimilés)
+
+Exécution du contrat (te fournir le Jeu et ses fonctions) ; consentement (publicité personnalisée et, le cas échéant, identifiants publicitaires) ; intérêt légitime (sécurité, prévention de la fraude et amélioration du Jeu) ; et respect des obligations légales.
+
+# 4. Partage des données
+
+Unity Technologies (Unity Gaming Services : Authentication, Cloud Save, Leaderboards et LevelPlay) : https://unity.com/legal/privacy-policy
+
+Google (Google Play Jeux et Google Play Billing) : https://policies.google.com/privacy
+
+Apple, si tu joues sur iOS : https://www.apple.com/legal/privacy/
+
+Les réseaux publicitaires partenaires de Unity LevelPlay, selon leur propre politique de confidentialité.
+
+Les autres joueurs : ton nom d'utilisateur, ton pays et tes points sont visibles par tous dans le classement.
+
+Nous ne vendons pas tes données personnelles.
+
+# 5. Transferts internationaux
+
+Nos prestataires peuvent traiter des données sur des serveurs situés hors de ton pays (par exemple aux États-Unis), avec les garanties exigées par la loi applicable, telles que les clauses contractuelles types.
+
+# 6. Durée de conservation
+
+Les données de ton compte et ta progression dans le cloud sont conservées tant que tu conserves le compte. Les données enregistrées sur ton appareil y restent jusqu'à ce que tu désinstalles le Jeu ou effaces ses données. Lorsque tu supprimes ton compte, tes données sont supprimées, sauf celles que nous devons conserver en vertu de la loi.
+
+# 7. Tes droits
+
+Tu peux demander l'accès, la rectification, l'effacement, la portabilité de tes données ou t'opposer à leur traitement, et retirer ton consentement à tout moment. Si tu résides en Californie, tu disposes en outre des droits prévus par le CCPA/CPRA. Tu peux déposer une plainte auprès de l'autorité de protection des données de ton pays.
+
+# 8. Supprimer ton compte et tes données
+
+Dans le Jeu : Paramètres → « Supprimer mon compte et mes données ». Cela supprime ton compte, ta progression dans le cloud et sur l'appareil, ainsi que ta place au classement.
+
+Sans le Jeu installé : écris à frailescitystudios@gmail.com avec l'objet « Supprimer compte Aero Blitz » en indiquant ton nom d'utilisateur. Nous répondrons dans un délai maximal de 30 jours.
+
+Les achats d'éléments permanents restent liés à ton compte Google Play ou Apple et sont gérés par eux.
+
+# 9. Mineurs
+
+Le Jeu ne s'adresse pas aux enfants de moins de 13 ans et nous ne collectons pas sciemment de données concernant des enfants de cet âge. Si tu penses qu'un enfant nous a fourni des données, écris-nous et nous les supprimerons.
+
+# 10. Sécurité
+
+Nous faisons appel à des prestataires disposant de mesures de sécurité reconnues et de connexions chiffrées. Aucun système n'est totalement sûr, mais nous nous efforçons de protéger tes données.
+
+# 11. Modifications de cette Politique
+
+En cas de modifications importantes, nous t'en informerons dans le Jeu et, lorsque la loi l'exige, nous te demanderons de les accepter à nouveau.
+
+# 12. Contact
+
+Emmanuel Rodriguez Ramirez · frailescitystudios@gmail.com

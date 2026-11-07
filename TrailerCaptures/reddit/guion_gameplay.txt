@@ -1,0 +1,9 @@
+# Gameplay real para Reddit: sin voz ni textos, con la música del juego (mundo 10)
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182212_vertical.mp4|1.0|6.0|negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182638_vertical.mp4|2.3|6.3|negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_181715_vertical.mp4|9.0|13.5|negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_184042_vertical.mp4|1.6|3.6|negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_184042_vertical.mp4|7.6|9.6|negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182625_vertical.mp4|0.0|3.4|negro_vertical.png|0|0|1080|1920
+music|musica_juego.wav

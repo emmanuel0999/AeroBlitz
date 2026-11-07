@@ -1,0 +1,39 @@
+1
+00:00:00,300 --> 00:00:02,750
+¿Crees que puedes superar los 70 niveles?
+
+2
+00:00:03,150 --> 00:00:04,350
+No lo creo.
+
+3
+00:00:04,400 --> 00:00:06,770
+¡Esquiva, carga, dispara!
+
+4
+00:00:07,250 --> 00:00:09,360
+Misiles que lo destrozan todo.
+
+5
+00:00:11,700 --> 00:00:14,660
+Diez mundos, cada uno más letal que el anterior.
+
+6
+00:00:17,700 --> 00:00:20,580
+Recoge monedas, mejora... lo vas a necesitar.
+
+7
+00:00:21,650 --> 00:00:22,570
+Cuidado...
+
+8
+00:00:24,120 --> 00:00:25,000
+Te lo dije.
+
+9
+00:00:25,050 --> 00:00:26,700
+Apuesto a que no los superas todos.
+
+10
+00:00:26,750 --> 00:00:29,110
+Aero Blitz, gratis en Google Play.

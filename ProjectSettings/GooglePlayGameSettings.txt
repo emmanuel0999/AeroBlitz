@@ -1,0 +1,5 @@
+lastUpgrade=20100
+proj.pluginVersion=2.1.0
+proj.AppId=45662627700
+and.ClientId=45662627700-6kg9vf4jbqfe87bagg4k90m42u3a9u84.apps.googleusercontent.com
+android.SetupDone=true

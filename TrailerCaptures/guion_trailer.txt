@@ -1,0 +1,18 @@
+# Guion del tráiler (versión reto). Cada línea: clip|video vertical|inicio|fin|rótulo
+# Reto inicial: nivel 70 lleno de muros
+clip|clip_182212_vertical.mp4|1.0|4.0|rotulos\rotulo_0_reto.png
+# Esquivar y disparar: nivel 38 con muchos asteroides (sustituye al nivel 45)
+clip|clip_182638_vertical.mp4|2.3|6.3|rotulos\rotulo_1_esquiva.png
+# Misiles y explosión: nivel 30
+clip|clip_181715_vertical.mp4|9.0|13.5|rotulos\rotulo_2_misiles.png
+# Mundos: niveles 10, 20 y 70
+clip|clip_182544_vertical.mp4|0.3|2.3|rotulos\rotulo_3_mundos.png
+clip|clip_183939_vertical.mp4|1.0|3.0|rotulos\rotulo_3_mundos.png
+clip|clip_182212_vertical.mp4|7.0|9.0|rotulos\rotulo_3_mundos.png
+# Mejoras: imán con monedas y sobrecarga (nivel 20)
+clip|clip_184042_vertical.mp4|1.6|3.6|rotulos\rotulo_4_mejoras.png
+clip|clip_184042_vertical.mp4|7.6|9.6|rotulos\rotulo_4_mejoras.png
+# Derrota: la vida llega a 0 y la nave explota (se corta antes del aviso de revivir con video)
+clip|clip_182625_vertical.mp4|0.0|3.4|rotulos\rotulo_7_dificil.png
+image|final_reto_horizontal.png|4.5
+music|audio_trailer.wav

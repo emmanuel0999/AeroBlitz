@@ -1,0 +1,7 @@
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182544_vertical.mp4|0.3|2.7|rotulos\r4_ice.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_183939_vertical.mp4|1.0|3.4|rotulos\r4_nebula.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182638_vertical.mp4|0.3|2.7|rotulos\r4_station.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182212_vertical.mp4|4.0|6.4|rotulos\r4_core.png|112|370|856|1522
+image|rotulos\f4.png|3.6
+music|audio_v4.wav

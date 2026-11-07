@@ -1,0 +1,44 @@
+{
+    "name": "AeroBlitz",
+    "rootNamespace": "AeroBlitz",
+    "references": [
+        "UnityEngine.UI",
+        "Unity.Purchasing",
+        "Unity.Services.Core",
+        "Unity.Services.Authentication",
+        "Unity.Services.Leaderboards",
+        "Unity.LevelPlay",
+        "Unity.Services.CloudSave",
+        "Google.Play.Games"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.purchasing",
+            "expression": "5.0.0",
+            "define": "AEROBLITZ_IAP"
+        },
+        {
+            "name": "com.unity.services.levelplay",
+            "expression": "9.0.0",
+            "define": "AEROBLITZ_ADS"
+        },
+        {
+            "name": "com.unity.services.leaderboards",
+            "expression": "2.0.0",
+            "define": "AEROBLITZ_UGS"
+        },
+        {
+            "name": "com.unity.services.cloudsave",
+            "expression": "3.0.0",
+            "define": "AEROBLITZ_CLOUDSAVE"
+        }
+    ],
+    "noEngineReferences": false
+}

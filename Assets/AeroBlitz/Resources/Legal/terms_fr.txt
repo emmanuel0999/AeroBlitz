@@ -1,0 +1,81 @@
+# CONDITIONS D'UTILISATION — AERO BLITZ
+
+Version 1 · En vigueur depuis le : 28 septembre 2026
+
+Les présentes Conditions d'utilisation (les « Conditions ») régissent l'utilisation du jeu Aero Blitz (le « Jeu »), proposé par Emmanuel Rodriguez Ramirez (« nous »), établi en République dominicaine. Pour toute question, écris-nous à frailescitystudios@gmail.com.
+
+# 1. Acceptation
+
+En cochant la case d'acceptation, en créant ton pilote ou en utilisant le Jeu, tu confirmes avoir lu et accepté les présentes Conditions et notre Politique de confidentialité. Si tu n'es pas d'accord, n'utilise pas le Jeu.
+
+# 2. Âge
+
+Le Jeu ne s'adresse pas aux enfants de moins de 13 ans. Si tu n'as pas atteint l'âge de la majorité dans ton pays, tu as besoin de l'autorisation de ton parent ou tuteur légal, qui accepte ces Conditions en ton nom et est responsable des achats que tu effectues.
+
+# 3. Licence d'utilisation
+
+Nous t'accordons une licence personnelle, limitée, non exclusive, non transférable et révocable d'utiliser le Jeu à des fins de divertissement. Il est interdit de : copier, modifier, décompiler ou désassembler le Jeu ; utiliser des triches, des bots, des logiciels non autorisés ou des bugs pour obtenir un avantage ; modifier les fichiers de sauvegarde ; revendre ou exploiter commercialement le Jeu ou son contenu.
+
+# 4. Ta progression et le compte facultatif
+
+Tu peux jouer sans compte. Dans ce cas, ta progression est enregistrée uniquement sur ton appareil et sera perdue si tu désinstalles le Jeu, effaces ses données, changes d'appareil ou si l'appareil est endommagé.
+
+Si tu te connectes avec Google (Google Play Jeux), ta progression est sauvegardée dans le cloud et tu peux la récupérer sur un autre appareil avec le même compte. Te connecter est ton choix et ta responsabilité. La sauvegarde est fournie « en l'état » : nous faisons des efforts raisonnables pour qu'elle fonctionne, mais nous ne garantissons pas sa disponibilité permanente ni l'absence de pertes dues à des pannes techniques, de connexion ou de services tiers.
+
+# 5. Contenu virtuel
+
+Les pièces, vies, vaisseaux, améliorations, équipements, peintures et autres éléments du Jeu (le « Contenu virtuel ») constituent une licence d'utilisation dans le Jeu et non un bien t'appartenant. Le Contenu virtuel n'a aucune valeur monétaire réelle, ne peut être échangé contre de l'argent ou des biens réels, et ne peut être vendu, transféré ou échangé en dehors du Jeu. Nous pouvons ajuster ses caractéristiques, ses prix ou sa disponibilité pour préserver l'équilibre du Jeu.
+
+# 6. Achats en argent réel
+
+Les achats s'effectuent via la boutique d'applications de ton appareil (Google Play ou App Store) et sont également régis par ses conditions. Les prix sont affichés dans la boutique avant confirmation.
+
+Le Contenu virtuel consommable (par exemple les pièces et les vies) est considéré comme livré dès qu'il est crédité dans ton Jeu. Les éléments permanents (vaisseaux, équipements, peintures premium, suppression des pubs) sont liés à ton compte de la boutique et peuvent être restaurés en te connectant avec ce même compte.
+
+L'abonnement Pilote VIP se renouvelle automatiquement jusqu'à ce que tu le résilies depuis la boutique. Tu peux le résilier à tout moment et conserves les avantages jusqu'à la fin de la période payée.
+
+Les remboursements sont traités selon les politiques de la boutique (Google Play ou Apple) et la loi applicable. Sauf disposition légale contraire, nous n'offrons pas de remboursement pour le Contenu virtuel déjà livré ou utilisé.
+
+# 7. Publicité
+
+Le Jeu affiche des publicités de tiers via Unity LevelPlay et ses réseaux partenaires. Nous ne sommes pas responsables du contenu des publicités ni des produits ou services de tiers. Les récompenses pour les vidéos dépendent de la disponibilité des publicités et sont limitées en temps et en quantité.
+
+# 8. Nom d'utilisateur et classement
+
+Ton nom d'utilisateur, ton pays et tes points sont affichés publiquement dans le classement. N'utilise pas de noms offensants, discriminatoires, usurpant l'identité d'une autre personne ou contenant des données personnelles comme ton vrai nom, ton téléphone ou ton adresse. Nous pouvons modifier ou supprimer les noms inappropriés et supprimer les scores obtenus de manière frauduleuse.
+
+# 9. Suspension
+
+Si tu enfreins ces Conditions (par exemple en trichant, en modifiant le Jeu ou en demandant des rétrofacturations frauduleuses), nous pouvons réinitialiser ta progression, retirer le Contenu virtuel obtenu indûment ou bloquer ton accès aux fonctions en ligne.
+
+# 10. Modifications et disponibilité du Jeu
+
+Nous pouvons mettre à jour, modifier, suspendre temporairement ou cesser de proposer le Jeu ou ses fonctions en ligne (classement, sauvegarde cloud, publicités). Dans la mesure du possible, nous t'en informerons avec un préavis raisonnable. Si le Jeu est arrêté, le Contenu virtuel ne sera plus disponible, sans préjudice des droits que la loi te reconnaît.
+
+# 11. Propriété intellectuelle
+
+Le Jeu, son code, ses graphismes, sons, noms et marques nous appartiennent ou sont utilisés sous licence. Ces Conditions ne te transfèrent aucun droit, à l'exception de la licence d'utilisation décrite.
+
+# 12. Exclusion de garanties
+
+Dans toute la mesure permise par la loi, le Jeu est fourni « en l'état » et « selon disponibilité », sans garantie d'aucune sorte, expresse ou implicite, notamment de fonctionnement ininterrompu, d'absence d'erreurs ou d'adéquation à un usage particulier.
+
+# 13. Limitation de responsabilité
+
+Dans toute la mesure permise par la loi, nous ne serons pas responsables des dommages indirects, accessoires ou consécutifs, ni de la perte de progression ou de Contenu virtuel que tu n'as pas sauvegardé avec le compte facultatif. Notre responsabilité totale envers toi pour toute réclamation liée au Jeu ne dépassera pas le montant que tu nous as payé au cours des 12 mois précédant la réclamation.
+
+# 14. Tes droits de consommateur
+
+Rien dans ces Conditions ne limite ou n'exclut les droits que te reconnaissent les lois de protection des consommateurs de ton pays de résidence et auxquels il ne peut être renoncé par contrat. Si une clause n'est pas valable dans ton pays, le reste des Conditions demeure en vigueur.
+
+# 15. Droit applicable et réclamations
+
+Ces Conditions sont régies par le droit de la République dominicaine. Avant toute réclamation, écris-nous à frailescitystudios@gmail.com afin de tenter de la résoudre à l'amiable dans un délai de 30 jours. Cela n'affecte pas ton droit de saisir les tribunaux ou les autorités de protection des consommateurs de ton pays de résidence lorsque la loi le permet.
+
+# 16. Modifications des présentes Conditions
+
+Nous pouvons mettre à jour ces Conditions. En cas de modifications importantes, nous te demanderons de les accepter à nouveau dans le Jeu. Si tu ne les acceptes pas, tu peux cesser d'utiliser le Jeu et demander la suppression de tes données.
+
+# 17. Contact
+
+Emmanuel Rodriguez Ramirez · frailescitystudios@gmail.com

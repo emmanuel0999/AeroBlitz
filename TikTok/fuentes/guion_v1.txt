@@ -1,0 +1,4 @@
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182212_vertical.mp4|0.5|9.0|rotulos\r1_level70.png|112|370|856|1522
+image|rotulos\f1.png|3.3
+music|audio_v1.wav

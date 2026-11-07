@@ -1,0 +1,14 @@
+# Tráiler vertical (TikTok, YouTube Shorts, Instagram Reels). Mismas tomas y audio que el horizontal.
+# clip|video|inicio|fin|rótulo|x|y|ancho|alto  (el juego va enmarcado debajo de la frase)
+size|1080|1920
+clip|clip_182212_vertical.mp4|1.0|4.0|rotulos_vertical\v0_reto.png|112|370|856|1522
+clip|clip_182638_vertical.mp4|2.3|6.3|rotulos_vertical\v1_esquiva.png|112|370|856|1522
+clip|clip_181715_vertical.mp4|9.0|13.5|rotulos_vertical\v2_misiles.png|112|370|856|1522
+clip|clip_182544_vertical.mp4|0.3|2.3|rotulos_vertical\v3_mundos.png|112|370|856|1522
+clip|clip_183939_vertical.mp4|1.0|3.0|rotulos_vertical\v3_mundos.png|112|370|856|1522
+clip|clip_182212_vertical.mp4|7.0|9.0|rotulos_vertical\v3_mundos.png|112|370|856|1522
+clip|clip_184042_vertical.mp4|1.6|3.6|rotulos_vertical\v4_mejoras.png|112|370|856|1522
+clip|clip_184042_vertical.mp4|7.6|9.6|rotulos_vertical\v4_mejoras.png|112|370|856|1522
+clip|clip_182625_vertical.mp4|0.0|3.4|rotulos_vertical\v7_dificil.png|112|370|856|1522
+image|final_reto_vertical.png|4.5
+music|audio_trailer.wav

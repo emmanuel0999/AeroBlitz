@@ -1,0 +1,77 @@
+# PRIVACY POLICY — AERO BLITZ
+
+Version 1 · Effective date: September 28, 2026
+
+This Policy explains what data the game Aero Blitz (the "Game") processes, why, and what your rights are. The data controller is Emmanuel Rodriguez Ramirez, Dominican Republic. Contact: frailescitystudios@gmail.com.
+
+# 1. Data we process
+
+Data you give us: the username (nickname) and country you choose when creating your pilot. Please do not use your real name or personal details as your username.
+
+Game progress: level, points, coins, lives, ships, upgrades, in-game purchases, language and settings.
+
+Identifiers: an anonymous player ID assigned by Unity Gaming Services. If you choose to sign in with Google (Google Play Games), also an identifier of your Google Play Games account. We never receive your password.
+
+Purchases: processed by Google Play or Apple. We receive the purchase confirmation (product and transaction number), never your payment details.
+
+Advertising: Unity LevelPlay and its partner ad networks may collect your device's advertising ID, your IP address, technical device data and your interactions with ads, in order to show and measure ads, prevent fraud and, if you allow it in your region, personalize them.
+
+Technical data: device information and error logs used by Unity services to run the Game and diagnose problems.
+
+# 2. How we use it
+
+To run the Game and save your progress; show the worldwide and per-country ranking; back up your progress to the cloud if you sign in; process and restore purchases; show ads and deliver video rewards; prevent cheating and fraud; and comply with legal obligations.
+
+# 3. Legal basis (users in the European Economic Area and similar)
+
+Performance of a contract (providing the Game and its features); consent (personalized advertising and, where applicable, advertising identifiers); legitimate interest (security, fraud prevention and improving the Game); and compliance with legal obligations.
+
+# 4. Who we share data with
+
+Unity Technologies (Unity Gaming Services: Authentication, Cloud Save, Leaderboards and LevelPlay): https://unity.com/legal/privacy-policy
+
+Google (Google Play Games and Google Play Billing): https://policies.google.com/privacy
+
+Apple, if you play on iOS: https://www.apple.com/legal/privacy/
+
+The ad networks that work with Unity LevelPlay, under their own privacy policies.
+
+Other players: your username, country and points are visible to everyone in the ranking.
+
+We do not sell your personal data.
+
+# 5. International transfers
+
+Our providers may process data on servers outside your country (for example, in the United States), with the safeguards required by applicable law, such as standard contractual clauses.
+
+# 6. How long we keep it
+
+Your account data and cloud progress are kept while you keep the account. Data stored on your device stays there until you uninstall the Game or clear its data. When you delete your account, your data is deleted, except what we must keep by law.
+
+# 7. Your rights
+
+You can request access, correction, deletion, portability or objection to the processing of your data, and withdraw your consent at any time. If you live in California, you also have the rights under the CCPA/CPRA. You can file a complaint with the data protection authority of your country.
+
+# 8. How to delete your account and data
+
+In the Game: Settings → "Delete my account and data". This deletes your account, your cloud and on-device progress, and your ranking entry.
+
+Without the Game installed: write to frailescitystudios@gmail.com with the subject "Delete Aero Blitz account" and include your username. We will respond within 30 days.
+
+Purchases of permanent items remain tied to your Google Play or Apple account and are managed by them.
+
+# 9. Children
+
+The Game is not directed to children under 13 and we do not knowingly collect data from children under that age. If you believe a child has given us data, write to us and we will delete it.
+
+# 10. Security
+
+We use providers with recognized security measures and encrypted connections. No system is completely secure, but we work to protect your data.
+
+# 11. Changes to this Policy
+
+If we make significant changes, we will notify you in the Game and, where the law requires it, ask you to accept them again.
+
+# 12. Contact
+
+Emmanuel Rodriguez Ramirez · frailescitystudios@gmail.com

@@ -1,0 +1,5 @@
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_181715_vertical.mp4|8.5|13.5|rotulos\r2_misiles.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_181715_vertical.mp4|32.3|35.3|rotulos\r2_misiles.png|112|370|856|1522
+image|rotulos\f2.png|3.3
+music|audio_v2.wav

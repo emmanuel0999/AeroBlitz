@@ -1,0 +1,33 @@
+¡Hola! Necesito tu ayuda con algo que me hace mucha ilusión 🚀
+
+Hice mi primer juego para Android, *Aero Blitz*, y para poder publicarlo Google me exige que al menos 12 personas lo prueben durante 14 días. ¿Me ayudas siendo una de ellas?
+
+*¿Qué es Aero Blitz?*
+Un juego de naves de acción rápida:
+- 70 niveles con dificultad creciente
+- Un arma con barra de carga: disparas unos segundos y luego toca esperar a que recargue
+- Obstáculos que puedes destruir y otros que no
+- Naves, mejoras y equipamiento
+- Ranking mundial y por país
+- En español, inglés y francés
+
+*Cómo unirte (3 pasos, en este orden):*
+
+1. Únete al grupo de Google (es obligatorio; sin esto los otros enlaces dan error):
+https://groups.google.com/g/aeroblitz-testers
+
+2. Acepta la invitación para ser tester:
+https://play.google.com/apps/testing/com.frailescitystudios.aeroblitz
+
+3. Instala el juego desde Google Play:
+https://play.google.com/store/apps/details?id=com.frailescitystudios.aeroblitz
+
+Usa la misma cuenta de Google (Gmail) en los tres pasos, y hazlo desde un teléfono Android.
+
+*Lo más importante:* deja el juego instalado durante 14 días. Google solo cuenta a los testers que siguen apuntados todo ese tiempo.
+
+El juego es gratis. Tiene anuncios y compras opcionales, pero no hace falta comprar nada para probarlo.
+
+Si encuentras algún fallo, algo que no se entienda o que te parezca muy difícil, dímelo. Todo comentario me sirve.
+
+¡Muchas gracias! 🙌

@@ -1,0 +1,12 @@
+# Anuncio 2 de TikTok: la computadora de la nave avisa al piloto
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182212_vertical.mp4|1.0|4.0|D:\Unity\AeroBlitz\TrailerCaptures\reddit\negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182638_vertical.mp4|2.6|4.8|D:\Unity\AeroBlitz\TrailerCaptures\reddit\negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_181715_vertical.mp4|9.3|12.5|D:\Unity\AeroBlitz\TrailerCaptures\reddit\negro_vertical.png|0|0|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182625_vertical.mp4|0.0|3.4|D:\Unity\AeroBlitz\TrailerCaptures\reddit\negro_vertical.png|0|0|1080|1920
+image|D:\Unity\AeroBlitz\TikTok\fuentes\promo\fin_promo2.png|4.2
+text|D:\Unity\AeroBlitz\TikTok\fuentes\promo\p2_t1.png|0.0|3.0|0|230|1080|400
+text|D:\Unity\AeroBlitz\TikTok\fuentes\promo\p2_t2.png|3.0|5.2|0|230|1080|400
+text|D:\Unity\AeroBlitz\TikTok\fuentes\promo\p2_t3.png|5.2|8.4|0|230|1080|400
+text|D:\Unity\AeroBlitz\TikTok\fuentes\promo\p2_t4.png|8.4|11.8|0|230|1080|400
+music|D:\Unity\AeroBlitz\TikTok\fuentes\audio_promo2_Zira_hq.wav

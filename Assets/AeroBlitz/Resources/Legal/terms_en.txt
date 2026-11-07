@@ -1,0 +1,81 @@
+# TERMS AND CONDITIONS — AERO BLITZ
+
+Version 1 · Effective date: September 28, 2026
+
+These Terms and Conditions ("Terms") govern your use of the game Aero Blitz (the "Game"), provided by Emmanuel Rodriguez Ramirez ("we", "us"), based in the Dominican Republic. If you have questions, write to us at frailescitystudios@gmail.com.
+
+# 1. Acceptance
+
+By ticking the acceptance box, creating your pilot or using the Game, you confirm that you have read and accept these Terms and our Privacy Policy. If you do not agree, do not use the Game.
+
+# 2. Age
+
+The Game is not directed to children under 13. If you are under the age of majority in your country, you need permission from your parent or legal guardian, who accepts these Terms on your behalf and is responsible for any purchases you make.
+
+# 3. License
+
+We grant you a personal, limited, non-exclusive, non-transferable and revocable license to use the Game for entertainment. You may not: copy, modify, decompile or reverse engineer the Game; use cheats, bots, unauthorized software or bugs to gain an advantage; tamper with save files; or resell or commercially exploit the Game or its content.
+
+# 4. Your progress and the optional account
+
+You can play without an account. In that case your progress is stored only on your device and will be lost if you uninstall the Game, clear its data, change devices, or your device is damaged.
+
+If you sign in with Google (Google Play Games), your progress is backed up to the cloud and you can recover it on another device with the same account. Signing in is your choice and your responsibility. The backup is provided "as is": we make reasonable efforts for it to work, but we do not guarantee it will always be available or that no loss will occur due to technical, connectivity or third-party service failures.
+
+# 5. Virtual content
+
+Coins, lives, ships, upgrades, equipment, paints and other in-game items ("Virtual Content") are a license to use within the Game, not property you own. Virtual Content has no real-world monetary value, cannot be redeemed for money or real goods, and cannot be sold, transferred or traded outside the Game. We may adjust its features, prices or availability to keep the Game balanced.
+
+# 6. Real-money purchases
+
+Purchases are made through your device's app store (Google Play or the App Store) and are also governed by that store's terms. Prices are shown in the store before you confirm.
+
+Consumable Virtual Content (such as coins and lives) is considered delivered as soon as it is credited to your Game. Permanent items (ships, equipment, premium paints, ad removal) are tied to your store account and can be restored by signing in with that same account.
+
+The VIP Pilot subscription renews automatically until you cancel it in the store. You can cancel at any time and keep the benefits until the end of the paid period.
+
+Refunds are handled under the store's policies (Google Play or Apple) and applicable law. Unless the law provides otherwise, we do not offer refunds for Virtual Content that has already been delivered or used.
+
+# 7. Advertising
+
+The Game shows third-party ads through Unity LevelPlay and its partner networks. We are not responsible for the content of ads or for third-party products or services. Rewards for watching videos depend on ad availability and have time and quantity limits.
+
+# 8. Username and ranking
+
+Your username, country and points are shown publicly in the ranking. Do not use names that are offensive, discriminatory, impersonate someone else, or contain personal data such as your real name, phone number or address. We may change or remove inappropriate names and remove fraudulently obtained scores.
+
+# 9. Suspension
+
+If you breach these Terms (for example by cheating, tampering with the Game or filing fraudulent chargebacks), we may reset your progress, remove improperly obtained Virtual Content, or block your access to online features.
+
+# 10. Changes and availability of the Game
+
+We may update, modify, temporarily suspend or stop offering the Game or its online features (ranking, cloud backup, ads). Where possible, we will give reasonable advance notice. If the Game is discontinued, Virtual Content will no longer be available, without prejudice to any rights you have under the law.
+
+# 11. Intellectual property
+
+The Game, its code, graphics, sounds, names and trademarks belong to us or are used under license. These Terms do not transfer any rights to you other than the license described above.
+
+# 12. Disclaimer of warranties
+
+To the maximum extent permitted by law, the Game is provided "as is" and "as available", without warranties of any kind, express or implied, including uninterrupted operation, freedom from errors or fitness for a particular purpose.
+
+# 13. Limitation of liability
+
+To the maximum extent permitted by law, we will not be liable for indirect, incidental or consequential damages, or for the loss of progress or Virtual Content that you did not back up with the optional account. Our total liability to you for any claim related to the Game will not exceed the amount you paid us in the 12 months before the claim.
+
+# 14. Your consumer rights
+
+Nothing in these Terms limits or excludes the rights granted to you by the consumer protection laws of your country of residence that cannot be waived by contract. If any clause is not valid in your country, the rest of these Terms remains in effect.
+
+# 15. Governing law and claims
+
+These Terms are governed by the laws of the Dominican Republic. Before starting any claim, please write to frailescitystudios@gmail.com so we can try to resolve it amicably within 30 days. This does not affect your right to go to the courts or consumer authorities of your country of residence where the law allows.
+
+# 16. Changes to these Terms
+
+We may update these Terms. If the changes are significant, we will ask you to accept them again within the Game. If you do not accept them, you can stop using the Game and request deletion of your data.
+
+# 17. Contact
+
+Emmanuel Rodriguez Ramirez · frailescitystudios@gmail.com

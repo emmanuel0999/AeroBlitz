@@ -1,0 +1,7 @@
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_183939_vertical.mp4|1.0|3.0|rotulos\r5_howfar.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_181715_vertical.mp4|2.0|4.0|rotulos\r5_howfar.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182638_vertical.mp4|2.3|4.3|rotulos\r5_howfar.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182212_vertical.mp4|7.0|9.0|rotulos\r5_howfar.png|112|370|856|1522
+image|rotulos\f5.png|2.6
+music|audio_v5.wav

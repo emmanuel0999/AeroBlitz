@@ -1,0 +1,5 @@
+size|1080|1920
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182638_vertical.mp4|2.3|5.3|rotulos\r3_pov.png|112|370|856|1522
+clip|D:\Unity\AeroBlitz\TrailerCaptures\clip_182625_vertical.mp4|0.0|3.4|rotulos\r3_pov.png|112|370|856|1522
+image|rotulos\f3.png|3.5
+music|audio_v3.wav

@@ -1,0 +1,23 @@
+# ninja log v5
+200	380	8127468631905947	D:/Unity/AeroBlitz/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6l3m2u6s/obj/armeabi-v7a/libswappywrapper.so	45df163775076df8
+7	1290	8127468641003210	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	f0e98b653ef42afb
+64	199	8127468630115133	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	1553f0ed23470946
+20	1081	8127468638938338	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	3237b7edf92535d4
+32	1010	8127468638227246	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ecdb3d08ab61742c
+26	978	8127468637900215	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	22feff568b116933
+40	996	8127468638084129	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	220af543352c0a26
+48	1137	8127468639509783	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	618abb57f7329089
+14	963	8127468637759156	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	ca6491beb605dfdd
+55	1220	8127468640235657	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8c729423c3c5e87d
+1290	1392	8127468642046680	D:/Unity/AeroBlitz/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6l3m2u6s/obj/armeabi-v7a/libgame.so	9a4e280f08c8e9c
+68	202	8127649907302307	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	1553f0ed23470946
+202	338	8127649908637167	D:/Unity/AeroBlitz/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6l3m2u6s/obj/armeabi-v7a/libswappywrapper.so	45df163775076df8
+60	979	8127649915005184	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	220af543352c0a26
+28	984	8127649915065555	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	22feff568b116933
+14	993	8127649915186580	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	ca6491beb605dfdd
+51	1029	8127649915544056	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ecdb3d08ab61742c
+21	1040	8127649915663424	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	3237b7edf92535d4
+43	1117	8127649916438745	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	618abb57f7329089
+35	1194	8127649917220188	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8c729423c3c5e87d
+6	1256	8127649917767733	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	f0e98b653ef42afb
+1257	1352	8127649918805285	D:/Unity/AeroBlitz/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6l3m2u6s/obj/armeabi-v7a/libgame.so	9a4e280f08c8e9c
