@@ -12,7 +12,7 @@ namespace AeroBlitz
         public const string StoreUrl = "https://play.google.com/store/apps/details?id=com.frailescitystudios.aeroblitz";
 
         /// <summary>Niveles completados tras los que se pide valorar (como mucho una vez en cada uno).</summary>
-        static readonly int[] ReviewLevels = { 5, 15, 30 };
+        static readonly int[] ReviewLevels = { 5, 10, 30 }; // el 10 es el primer jefe
 
         /// <summary>
         /// Pide la valoración si el jugador acaba de completar uno de los niveles elegidos por primera vez.
@@ -70,6 +70,9 @@ namespace AeroBlitz
             Debug.Log("[Review] (Editor) Aquí se pediría la valoración de Google Play.");
 #endif
         }
+
+        /// <summary>Abre la ficha del juego en Google Play (para valorarlo). A diferencia de la ventana automática, no depende de ninguna cuota.</summary>
+        public static void OpenStorePage() => Application.OpenURL(StoreUrl);
 
         /// <summary>Abre el menú de compartir de Android con un texto (incluye el enlace de Google Play).</summary>
         public static void ShareText(string text)

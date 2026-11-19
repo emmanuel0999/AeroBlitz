@@ -3,7 +3,12 @@ using UnityEngine;
 
 namespace AeroBlitz
 {
-    public enum PriceType { Free, Coins, RealMoney, Mission }
+    public enum PriceType { Free, Coins, RealMoney, Mission, Streak }
+
+    /// <summary>Habilidad pasiva de las naves premium (siempre activa).</summary>
+    public enum PassiveAbility { None, Rebirth, Armor, Pierce }
+    /// <summary>Habilidad con botón de las naves premium (con tiempo de espera).</summary>
+    public enum ActiveAbility { None, Flare, TotalShield, Overdrive }
 
     public class ShipDefinition
     {
@@ -20,7 +25,17 @@ namespace AeroBlitz
         public float fireWindow;      // segundos que dura la barra llena (siempre < chargeTime)
         public int tier;              // 1..3, define el "nivel" base de la nave
         public Vector2[] shape;       // polígono (espacio -1..1) para generar el sprite
-        public Color accent;
+        public Color accent;          // color de las franjas y detalles (no se tiñe con la pintura)
+        public float cockpitY = 0.32f; // altura de la cabina (espacio -1..1)
+        public float flameY = -0.8f;   // de dónde sale el fuego del motor (espacio -1..1)
+        public float invulnBonus;      // segundos extra de invulnerabilidad tras un golpe (Espectro)
+
+        // Solo naves premium
+        public PassiveAbility passive;
+        public ActiveAbility active;
+        public Color bulletColor;      // color propio de sus balas (alfa 0 = color normal)
+        public Color metalColor;       // tono metálico del casco con la pintura "Estándar" (cobre, acero, cromo)
+        public bool IsPremium => priceType == PriceType.RealMoney;
     }
 
     public static class ShipCatalog
@@ -32,37 +47,72 @@ namespace AeroBlitz
             new ShipDefinition {
                 id = "falcon",
                 priceType = PriceType.Free, maxHealth = 100, speed = 6f, shotsPerCharge = 3,
-                chargeTime = 9f, fireWindow = 3f, tier = 1, accent = new Color(0.3f, 0.8f, 1f),
+                chargeTime = 9f, fireWindow = 3f, tier = 1, accent = new Color(0.3f, 0.8f, 1f), cockpitY = 0.35f, flameY = -0.8f,
                 shape = new[] { new Vector2(0,1), new Vector2(0.35f,0.1f), new Vector2(0.9f,-0.5f), new Vector2(0.35f,-0.35f), new Vector2(0.25f,-0.8f), new Vector2(-0.25f,-0.8f), new Vector2(-0.35f,-0.35f), new Vector2(-0.9f,-0.5f), new Vector2(-0.35f,0.1f) }
             },
             new ShipDefinition {
                 id = "wasp",
                 priceType = PriceType.Coins, coinPrice = 2500, maxHealth = 90, speed = 7.5f, shotsPerCharge = 4,
-                chargeTime = 8.5f, fireWindow = 3f, tier = 1, accent = new Color(1f, 0.85f, 0.2f),
+                chargeTime = 8.5f, fireWindow = 3f, tier = 1, accent = new Color(1f, 0.85f, 0.2f), cockpitY = 0.35f, flameY = -0.85f,
                 shape = new[] { new Vector2(0,1), new Vector2(0.2f,0.3f), new Vector2(0.95f,-0.2f), new Vector2(0.95f,-0.45f), new Vector2(0.2f,-0.3f), new Vector2(0.15f,-0.85f), new Vector2(-0.15f,-0.85f), new Vector2(-0.2f,-0.3f), new Vector2(-0.95f,-0.45f), new Vector2(-0.95f,-0.2f), new Vector2(-0.2f,0.3f) }
+            },
+            // Naves nuevas por monedas (ninguna supera a las premium en lo suyo; las premium además tienen habilidades)
+            new ShipDefinition {
+                id = "hummingbird",
+                priceType = PriceType.Coins, coinPrice = 4000, maxHealth = 95, speed = 8f, shotsPerCharge = 4,
+                chargeTime = 8.5f, fireWindow = 3f, tier = 1, accent = new Color(0.2f, 1f, 0.8f), cockpitY = 0.38f, flameY = -0.9f,
+                shape = new[] { new Vector2(0,1), new Vector2(0.12f,0.4f), new Vector2(0.18f,-0.1f), new Vector2(0.7f,-0.45f), new Vector2(0.75f,-0.6f), new Vector2(0.2f,-0.5f), new Vector2(0.14f,-0.9f), new Vector2(-0.14f,-0.9f), new Vector2(-0.2f,-0.5f), new Vector2(-0.75f,-0.6f), new Vector2(-0.7f,-0.45f), new Vector2(-0.18f,-0.1f), new Vector2(-0.12f,0.4f) }
             },
             new ShipDefinition {
                 id = "guardian",
                 priceType = PriceType.Coins, coinPrice = 6000, maxHealth = 140, speed = 5.5f, shotsPerCharge = 4,
-                chargeTime = 9f, fireWindow = 3.5f, tier = 2, accent = new Color(0.4f, 1f, 0.5f),
+                chargeTime = 9f, fireWindow = 3.5f, tier = 2, accent = new Color(0.4f, 1f, 0.5f), cockpitY = 0.35f, flameY = -0.6f,
                 shape = new[] { new Vector2(0,0.95f), new Vector2(0.5f,0.5f), new Vector2(0.75f,-0.2f), new Vector2(0.9f,-0.8f), new Vector2(0.3f,-0.6f), new Vector2(-0.3f,-0.6f), new Vector2(-0.9f,-0.8f), new Vector2(-0.75f,-0.2f), new Vector2(-0.5f,0.5f) }
             },
             new ShipDefinition {
+                id = "bastion",
+                priceType = PriceType.Coins, coinPrice = 9000, maxHealth = 180, speed = 5f, shotsPerCharge = 4,
+                chargeTime = 9f, fireWindow = 3.5f, tier = 2, accent = new Color(1f, 0.32f, 0.3f), cockpitY = 0.38f, flameY = -0.7f,
+                shape = new[] { new Vector2(0,0.8f), new Vector2(0.3f,0.75f), new Vector2(0.45f,0.45f), new Vector2(0.9f,0.3f), new Vector2(0.95f,-0.5f), new Vector2(0.6f,-0.85f), new Vector2(0.25f,-0.7f), new Vector2(-0.25f,-0.7f), new Vector2(-0.6f,-0.85f), new Vector2(-0.95f,-0.5f), new Vector2(-0.9f,0.3f), new Vector2(-0.45f,0.45f), new Vector2(-0.3f,0.75f) }
+            },
+            new ShipDefinition {
+                id = "viper",
+                priceType = PriceType.Coins, coinPrice = 13000, maxHealth = 100, speed = 6.5f, shotsPerCharge = 6,
+                chargeTime = 8.5f, fireWindow = 3.5f, tier = 2, accent = new Color(0.7f, 1f, 0.15f), cockpitY = 0.2f, flameY = -0.85f,
+                shape = new[] { new Vector2(0,0.55f), new Vector2(0.12f,0.6f), new Vector2(0.28f,1f), new Vector2(0.42f,0.92f), new Vector2(0.36f,0.3f), new Vector2(0.85f,-0.3f), new Vector2(0.5f,-0.42f), new Vector2(0.22f,-0.85f), new Vector2(-0.22f,-0.85f), new Vector2(-0.5f,-0.42f), new Vector2(-0.85f,-0.3f), new Vector2(-0.36f,0.3f), new Vector2(-0.42f,0.92f), new Vector2(-0.28f,1f), new Vector2(-0.12f,0.6f) }
+            },
+            new ShipDefinition {
+                id = "comet",
+                priceType = PriceType.Coins, coinPrice = 18000, maxHealth = 140, speed = 7f, shotsPerCharge = 5,
+                chargeTime = 7.5f, fireWindow = 3.5f, tier = 2, accent = new Color(0.35f, 0.65f, 1f), cockpitY = 0.4f, flameY = -0.85f,
+                shape = new[] { new Vector2(0,1), new Vector2(0.22f,0.55f), new Vector2(0.35f,0.1f), new Vector2(0.95f,-0.55f), new Vector2(0.9f,-0.7f), new Vector2(0.3f,-0.55f), new Vector2(0.2f,-0.85f), new Vector2(-0.2f,-0.85f), new Vector2(-0.3f,-0.55f), new Vector2(-0.9f,-0.7f), new Vector2(-0.95f,-0.55f), new Vector2(-0.35f,0.1f), new Vector2(-0.22f,0.55f) }
+            },
+            new ShipDefinition {
+                id = "specter",
+                priceType = PriceType.Coins, coinPrice = 25000, maxHealth = 120, speed = 7.8f, shotsPerCharge = 5,
+                chargeTime = 7.5f, fireWindow = 3.5f, tier = 2, accent = new Color(0.6f, 0.5f, 1f), cockpitY = 0.38f, flameY = -0.55f, invulnBonus = 0.6f,
+                shape = new[] { new Vector2(0,0.9f), new Vector2(0.3f,0.35f), new Vector2(0.95f,0.05f), new Vector2(0.75f,-0.25f), new Vector2(0.85f,-0.6f), new Vector2(0.45f,-0.4f), new Vector2(0.3f,-0.75f), new Vector2(0,-0.55f), new Vector2(-0.3f,-0.75f), new Vector2(-0.45f,-0.4f), new Vector2(-0.85f,-0.6f), new Vector2(-0.75f,-0.25f), new Vector2(-0.95f,0.05f), new Vector2(-0.3f,0.35f) }
+            },
+            // Premium: más vida/disparos/carga, habilidad pasiva + habilidad con botón, balas de color propio
+            new ShipDefinition {
                 id = "phoenix",
                 priceType = PriceType.RealMoney, productId = ProductIds.ShipPhoenix, maxHealth = 150, speed = 7f, shotsPerCharge = 6,
-                chargeTime = 7f, fireWindow = 4f, tier = 3, accent = new Color(1f, 0.45f, 0.1f),
+                chargeTime = 7f, fireWindow = 4f, tier = 3, accent = new Color(1f, 0.45f, 0.1f), cockpitY = 0.4f, flameY = -0.9f,
+                passive = PassiveAbility.Rebirth, active = ActiveAbility.Flare, bulletColor = new Color(1f, 0.6f, 0.2f), metalColor = new Color(1f, 0.68f, 0.45f),
                 shape = new[] { new Vector2(0,1), new Vector2(0.25f,0.4f), new Vector2(1f,0.1f), new Vector2(0.6f,-0.3f), new Vector2(0.9f,-0.9f), new Vector2(0.2f,-0.55f), new Vector2(0,-0.9f), new Vector2(-0.2f,-0.55f), new Vector2(-0.9f,-0.9f), new Vector2(-0.6f,-0.3f), new Vector2(-1f,0.1f), new Vector2(-0.25f,0.4f) }
             },
             new ShipDefinition {
                 id = "titan",
                 priceType = PriceType.RealMoney, productId = ProductIds.ShipTitan, maxHealth = 230, speed = 6f, shotsPerCharge = 7,
-                chargeTime = 7f, fireWindow = 4f, tier = 3, accent = new Color(0.75f, 0.5f, 1f),
+                chargeTime = 7f, fireWindow = 4f, tier = 3, accent = new Color(0.75f, 0.5f, 1f), cockpitY = 0.4f, flameY = -0.9f,
+                passive = PassiveAbility.Armor, active = ActiveAbility.TotalShield, bulletColor = new Color(0.82f, 0.6f, 1f), metalColor = new Color(0.72f, 0.78f, 0.9f),
                 shape = new[] { new Vector2(0,0.9f), new Vector2(0.45f,0.7f), new Vector2(0.6f,0.2f), new Vector2(1f,0f), new Vector2(1f,-0.6f), new Vector2(0.5f,-0.9f), new Vector2(-0.5f,-0.9f), new Vector2(-1f,-0.6f), new Vector2(-1f,0f), new Vector2(-0.6f,0.2f), new Vector2(-0.45f,0.7f) }
             },
             new ShipDefinition {
                 id = "nova",
                 priceType = PriceType.RealMoney, productId = ProductIds.ShipNova, maxHealth = 180, speed = 8.5f, shotsPerCharge = 8,
-                chargeTime = 6.5f, fireWindow = 4.5f, tier = 3, accent = new Color(1f, 0.3f, 0.8f),
+                chargeTime = 6.5f, fireWindow = 4.5f, tier = 3, accent = new Color(1f, 0.3f, 0.8f), cockpitY = 0.42f, flameY = -0.6f,
+                passive = PassiveAbility.Pierce, active = ActiveAbility.Overdrive, bulletColor = new Color(1f, 0.45f, 0.9f), metalColor = new Color(1f, 0.8f, 0.95f),
                 shape = new[] { new Vector2(0,1), new Vector2(0.15f,0.2f), new Vector2(0.7f,0.35f), new Vector2(1f,-0.3f), new Vector2(0.3f,-0.25f), new Vector2(0.4f,-0.9f), new Vector2(0,-0.6f), new Vector2(-0.4f,-0.9f), new Vector2(-0.3f,-0.25f), new Vector2(-1f,-0.3f), new Vector2(-0.7f,0.35f), new Vector2(-0.15f,0.2f) }
             },
         };

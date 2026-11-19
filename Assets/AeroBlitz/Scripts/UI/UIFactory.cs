@@ -119,10 +119,11 @@ namespace AeroBlitz
             txt.verticalOverflow = VerticalWrapMode.Truncate;
             btn.onClick.AddListener(() => AudioFX.Instance?.Play(AudioFX.Sfx.Click));
             if (onClick != null) btn.onClick.AddListener(onClick);
+            if (label != null && label.Contains("$ ")) txt.text = UIKit.ApplyCoinIcon(btn, label); // "$ 4.000" -> moneda + "4.000"
             return btn;
         }
 
-        public static void SetLabel(this Button b, string text) => b.GetComponentInChildren<Text>().text = text;
+        public static void SetLabel(this Button b, string text) => b.GetComponentInChildren<Text>().text = UIKit.ApplyCoinIcon(b, text);
         public static void SetColor(this Button b, Color c) => b.GetComponent<Image>().color = c;
 
         public static ProgressBar Bar(Transform parent, Color bg, Color fill)

@@ -8,8 +8,9 @@ namespace AeroBlitz.EditorTools
     /// <summary>
     /// Genera el ícono del juego por código (nave Halcón sobre fondo espacial) y lo asigna al proyecto.
     /// Menú: Aero Blitz > Generar ícono. Para usar un ícono propio, reemplaza Assets/AeroBlitz/Icon/icon_1024.png.
-    /// OJO: desde la versión 12 el icono del juego es el de StoreAssets/iconos_nuevos/opcion_a2_disparos.png:
-    /// este menú sobrescribe ese archivo con el diseño antiguo, así que no lo uses salvo que quieras volver a él.
+    /// OJO: desde la versión 15 (1.0.3) el icono del juego es StoreAssets/iconos_v15/icono_final_1024.png (Fénix al ataque,
+    /// hecho con TrailerCaptures/herramientas/icono_final.ps1); el de las versiones 12-14 quedó en StoreAssets/iconos_nuevos/icon_1024_hasta_v14.png.
+    /// Este menú sobrescribe el icono con el diseño antiguo, así que no lo uses salvo que quieras volver a él.
     /// </summary>
     public static class IconGenerator
     {

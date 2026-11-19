@@ -9,7 +9,7 @@ namespace AeroBlitz
         public const string GameName = "Aero Blitz";
         public const int TotalLevels = 70;
         public const int EasyLevels = 5;
-        public const int DefaultLives = 3;
+        public const int DefaultLives = 5;
         public const int MaxLives = 99;
 
         // ---------------- ANUNCIOS (Unity LevelPlay) ----------------
@@ -56,7 +56,10 @@ namespace AeroBlitz
         public const float IndestructibleDamagePercent = 0.5f;
         /// <summary>Desde este nivel los indestructibles quitan menos, porque hay muchos más obstáculos en pantalla.</summary>
         public const int IndestructibleReducedFromLevel = 25;
-        public const float IndestructibleDamagePercentLate = 0.25f;
+        public const float IndestructibleDamagePercentLate = 0.18f;
+        /// <summary>Titán (pasiva Coraza): % de la vida que le quitan los indestructibles (niveles 1-24 / desde el 25).</summary>
+        public const float IndestructibleArmorPercent = 0.25f;
+        public const float IndestructibleArmorPercentLate = 0.10f;
 
         // ---------------- OBJETOS DURANTE EL NIVEL ----------------
         /// <summary>Desde este nivel aparecen monedas y mejoras temporales que se recogen al pasar por encima.</summary>
@@ -79,18 +82,34 @@ namespace AeroBlitz
         public const int TrialsFromLevel = 25;
         public const float TrialChancePerLevel = 0.6f;
 
-        public static float IndestructibleDamageFor(int level) =>
-            level >= IndestructibleReducedFromLevel ? IndestructibleDamagePercentLate : IndestructibleDamagePercent;
+        // ---------------- JEFES (niveles 10, 20 ... 70) ----------------
+        /// <summary>Un disparo de jefe quita este % de la vida máxima (sube un poco con el nivel).</summary>
+        public const float BossShotDamageMin = 0.09f, BossShotDamageMax = 0.14f;
+        public const float BossShotArmorFactor = 0.6f;       // Titán (Coraza)
+        /// <summary>Durante la pelea el arma carga más rápido: con 3 tiros cada 9 s no se podría vencer a un jefe.</summary>
+        public const float BossChargeBoost = 2f;
+        /// <summary>Fracción de la vida del jefe que quita cada misil (8 misiles por nivel).</summary>
+        public const float BossMissileDamage01 = 0.045f;
+        /// <summary>Monedas extra al vencer a un jefe por primera vez (por cada nivel de jefe: 10 → x1, 70 → x7).</summary>
+        public const int BossBonusCoinsPerTier = 300;
+
+        public static float BossShotDamageFor(int level) =>
+            UnityEngine.Mathf.Lerp(BossShotDamageMin, BossShotDamageMax, UnityEngine.Mathf.InverseLerp(10f, 70f, level));
+
+        public static float IndestructibleDamageFor(int level, bool armor = false) =>
+            level >= IndestructibleReducedFromLevel
+                ? (armor ? IndestructibleArmorPercentLate : IndestructibleDamagePercentLate)
+                : (armor ? IndestructibleArmorPercent : IndestructibleDamagePercent);
 
         // ---------------- VIDAS ----------------
-        /// <summary>El contador empieza al perder las 3 vidas; a las N horas se recargan las 3 vidas
-        /// automáticamente (también con la aplicación cerrada).</summary>
-        public const float LifeRefillHours = 8f;
-        /// <summary>Videos necesarios para ganar 1 vida (cada video = 33,3% de la barra).</summary>
-        public const int VideosPerLife = 3;
+        /// <summary>El contador empieza al perder la última vida; a las N horas se recargan todas las vidas
+        /// (DefaultLives) automáticamente (también con la aplicación cerrada).</summary>
+        public const float LifeRefillHours = 4f;
+        /// <summary>Videos necesarios para ganar 1 vida (1 = cada video da una vida; los textos dicen "1 video = 1 vida").</summary>
+        public const int VideosPerLife = 1;
         /// <summary>Máximo de vidas que se pueden ganar con videos dentro de cada período.</summary>
-        public const int MaxVideoLivesPerWindow = 2;
-        public const float VideoLifeWindowHours = 5f;
+        public const int MaxVideoLivesPerWindow = 3;
+        public const float VideoLifeWindowHours = 4f;
 
         // ---------------- MEJORAS POR VIDEO ----------------
         /// <summary>Videos necesarios para subir 1 nivel de mejora.</summary>
@@ -111,17 +130,45 @@ namespace AeroBlitz
         public const int RankingTopCount = 50;
 
         // ---------------- ECONOMÍA ----------------
-        public const int DailyRewardCoins = 100;
         public const int VipDailyLives = 3;
         public const float VipCoinMultiplier = 2f;
         public const float ReviveHealthPercent = 0.5f;
 
         // ---------------- MISIONES ----------------
         // Objetivos y premios de cada misión: Core/Missions.cs
-        public const int ChestCoinsMin = 150, ChestCoinsMax = 400;   // el cofre siempre da monedas
-        public const float ChestLifeChance = 0.35f;                   // probabilidad de +1 vida
-        public const float ChestUpgradeChance = 0.15f;                // probabilidad de 1 nivel de mejora gratis
-        public const int ChestUpgradeFallbackCoins = 300;             // si la nave ya tiene todas las mejoras
         public const int WeeklyAllPaintsBonus = 500;                  // extra si ya tiene todas las pinturas exclusivas
+
+        // ---------------- COFRES ----------------
+        // Solo se ganan jugando (nunca se venden). Contenido: Core/Chests.cs
+        // Común: misión diaria y día 4 de la racha. Raro: cada N niveles. Épico: misión semanal.
+        public const int RareChestEveryLevels = 5;
+        public const float CommonCoinsChance = 0.80f, CommonLifeChance = 0.15f;   // el 5 % restante: pintura
+        public const int CommonCoinsMin = 150, CommonCoinsMax = 400;
+        public const float RareCoinsChance = 0.60f, RareItemChance = 0.30f;       // el 10 % restante: pintura o estela
+        public const int RareCoinsMin = 500, RareCoinsMax = 1000;
+        public const float EpicWeaponChance = 0.40f, EpicShipChance = 0.30f;      // el 30 % restante: estela rara
+        public const int TempWeaponHours = 24;                                    // arma premium de prueba
+        // Si el premio que tocó ya no está disponible (lo tiene todo), se dan monedas:
+        public const int CommonChestFallbackCoins = 300, RareChestFallbackCoins = 800, EpicChestFallbackCoins = 2000;
+
+        // ---------------- NAVES ----------------
+        // Estilos (skins) por nave, con monedas. El de serie es gratis: cartoon en las normales, metálico en las premium.
+        public const int NeonSkinPrice = 3000;                 // neón: cualquier nave
+        public const int CartoonSkinPrice = 1500;              // cartoon para una nave premium
+        public const int ChestPaintMaxPrice = 1000;            // los cofres no regalan pinturas más caras (la Oro se compra)
+        // Habilidades premium (pasivas en GameplayController.HitPlayer / SpawnVolley)
+        public const float RebirthHealthPercent = 0.4f;        // Fénix: renace con este % de vida (1 vez por nivel)
+        public const int PiercePassiveExtra = 1;               // Nova: obstáculos extra que atraviesa cada bala
+        public const float FlareCooldown = 30f;                // Fénix: Llamarada
+        public const float TotalShieldCooldown = 25f, TotalShieldSeconds = 4f;   // Titán: Escudo total
+        public const float OverdriveCooldown = 25f, OverdriveSeconds = 3f;       // Nova: Hipervelocidad
+        public const float OverdriveFireInterval = 0.14f;
+        public const float AbilityFirstCooldown = 6f;          // espera al empezar cada nivel
+
+        // ---------------- RACHA DIARIA ----------------
+        // Premios de cada día: Core/DailyStreak.cs
+        public const int TempShipHours = 24;                          // día 7: nave premium de prueba
+        public const int StreakPaintFallbackCoins = 500;              // día 5 si ya tiene todas las pinturas de la racha
+        public const int StreakShipFallbackCoins = 1500;              // día 7 si ya tiene todas las naves premium
     }
 }

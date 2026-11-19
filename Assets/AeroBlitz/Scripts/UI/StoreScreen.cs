@@ -41,6 +41,7 @@ namespace AeroBlitz
             {
                 var tab = t;
                 _tabButtons[t] = UIFactory.Button(tabs, L.T("tab." + t), Palette.PanelLight, () => SelectTab(tab), 30);
+                _tabButtons[t].SetIcon(TabIcon(t));
             }
 
             var listBg = UIFactory.Image(Root, new Color(0, 0, 0, 0.2f), true, "ListBg");
@@ -51,6 +52,21 @@ namespace AeroBlitz
             var restore = UIFactory.Button(Root, L.T("set.restore"), Palette.Grey, () =>
                 IAPManager.Instance.RestorePurchases((ok, msg) => UIManager.Instance.Toast(msg)), 32);
             restore.GetComponent<RectTransform>().Place(0.25f, 0.025f, 0.75f, 0.085f);
+            restore.SetIcon("icon_restore");
+        }
+
+        static string TabIcon(string tab)
+        {
+            switch (tab)
+            {
+                case ProductCatalog.CatOffers: return "icon_gift";
+                case ProductCatalog.CatLives: return "icon_heart";
+                case ProductCatalog.CatCoins: return "icon_coin";
+                case TabFree: return "icon_video";
+                case ProductCatalog.CatShips: return "icon_rocket";
+                case ProductCatalog.CatEquipment: return "icon_bolt";
+                default: return "icon_cart";
+            }
         }
 
         public override void OnShow() => AdsManager.Instance.HideBanner();
@@ -75,7 +91,7 @@ namespace AeroBlitz
 
             foreach (var p in ProductCatalog.All)
             {
-                if (p.category != _tab) continue;
+                if (p.category != _tab || p.hidden) continue;
                 var id = p.id;
                 bool owned = p.kind != ProductKind.Consumable && (ProductCatalog.IsOwned(d, id) || (p.kind == ProductKind.Subscription && d.vip));
                 bool highlight = id == ProductIds.StarterPack || id == ProductIds.VipMonthly;
@@ -97,8 +113,8 @@ namespace AeroBlitz
                 gm.RewardedCoinsLeft > 0, gm.WatchAdForCoins, false, "free_coins");
             ProductRow(L.T("store.free_upgrade"), L.T("store.free_upgrade_desc_fmt", GameConfig.VideosPerUpgrade, gm.RewardedUpgradesLeft), L.T("store.go_hangar"), Palette.Cyan,
                 true, () => UIManager.Instance.ShowScreen<HangarScreen>(), false, "free_upgrade");
-            ProductRow(L.T("menu.daily"), gm.Data.vip ? L.T("store.daily_vip") : L.T("store.daily_fmt", GameConfig.DailyRewardCoins),
-                L.T(gm.CanClaimDaily ? "store.claim" : "store.tomorrow"), Palette.Gold, gm.CanClaimDaily, gm.ClaimDaily, false, "daily");
+            ProductRow(L.T("streak.title"), L.T(gm.Data.vip ? "store.streak_vip_fmt" : "store.streak_fmt", DailyStreak.CurrentDay(d)),
+                L.T(gm.CanClaimDaily ? "store.claim" : "store.open"), Palette.Gold, true, () => UIManager.Instance.ShowDailyStreak(), false, "daily");
         }
 
         void BuildCoinShop()
@@ -141,7 +157,16 @@ namespace AeroBlitz
             bg.Pref(170);
             if (highlight) bg.gameObject.AddComponent<Outline>().effectColor = Palette.Gold;
             float textLeft = 0f;
-            if (icon != null)
+            if (icon != null && icon.StartsWith("ship:") && ShipCatalog.Get(icon.Substring(5)) != null)
+            {
+                var ship = ShipCatalog.Get(icon.Substring(5));
+                var state = GameManager.Instance.Data.GetShip(ship.id) ?? new ShipState { shipId = ship.id };
+                var art = ShipUI.ShipImage(bg.transform, state, 130);
+                art.rectTransform.anchorMin = art.rectTransform.anchorMax = new Vector2(0.085f, 0.5f);
+                art.rectTransform.anchoredPosition = Vector2.zero;
+                textLeft = 0.16f;
+            }
+            else if (icon != null)
             {
                 var img = UIFactory.Image(bg.transform, Color.white, false, "Icon");
                 img.sprite = SpriteFactory.Icon(icon);

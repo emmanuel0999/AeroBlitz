@@ -7,7 +7,7 @@ namespace AeroBlitz
     /// Genera todos los sprites por código. Para usar arte propio, reemplaza estos métodos
     /// por referencias a tus sprites (la lógica del juego no cambia).
     /// </summary>
-    public static class SpriteFactory
+    public static partial class SpriteFactory
     {
         static readonly Dictionary<string, Sprite> Cache = new Dictionary<string, Sprite>();
 
@@ -17,22 +17,57 @@ namespace AeroBlitz
             return s;
         }
 
-        static Texture2D NewTex(int w, int h)
+        /// <summary>
+        /// Textura para un sprite. Con mipmaps (por defecto) se ve limpia también cuando sale pequeña en pantalla
+        /// (estrellas, balas, naves lejanas); el sesgo negativo mantiene la nitidez cuando se ve a su tamaño o algo menor.
+        /// </summary>
+        static Texture2D NewTex(int w, int h, bool mips = true)
         {
-            var t = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
+            var t = new Texture2D(w, h, TextureFormat.RGBA32, mips) { filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
+            if (mips) t.mipMapBias = -0.5f;
             return t;
         }
 
         static Sprite Finish(Texture2D t, Color[] px, float ppu, Vector4 border = default)
         {
             t.SetPixels(px);
-            t.Apply(false, true);
+            t.Apply(t.mipmapCount > 1, true);
             return Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f), ppu, 0, SpriteMeshType.FullRect, border);
+        }
+
+        /// <summary>
+        /// Polígono (coordenadas -1..1) con borde suave exacto y contorno oscuro por dentro (el tamaño no cambia).
+        /// shade recibe el punto y la profundidad (distancia al borde) para poder dar volumen.
+        /// </summary>
+        static Color[] PolyPixels(int S, Vector2[] poly, System.Func<Vector2, float, Color> shade, float ink, Color inkColor)
+        {
+            var px = new Color[S * S];
+            float pw = 2f / S;
+            for (int y = 0; y < S; y++)
+                for (int x = 0; x < S; x++)
+                {
+                    var p = new Vector2((x + 0.5f) / S * 2f - 1f, (y + 0.5f) / S * 2f - 1f);
+                    float dist = EdgeDist(p, poly);
+                    bool inside = InPoly(p, poly);
+                    float sd = inside ? -dist : dist;
+                    if (sd > pw) continue;
+                    var c = Color.Lerp(inkColor, shade(p, -sd), Cov(-sd - ink, pw));
+                    c.a = Cov(-sd, pw);
+                    px[y * S + x] = c;
+                }
+            return px;
+        }
+
+        /// <summary>Ruido fijo por posición (textura fina de roca y metal).</summary>
+        static float Hash(Vector2 p)
+        {
+            float h = Mathf.Sin(p.x * 127.1f + p.y * 311.7f) * 43758.5453f;
+            return h - Mathf.Floor(h);
         }
 
         public static Sprite White => Cached("white", () =>
         {
-            var t = NewTex(4, 4);
+            var t = NewTex(4, 4, false);
             var px = new Color[16];
             for (int i = 0; i < 16; i++) px[i] = Color.white;
             return Finish(t, px, 4);
@@ -41,8 +76,8 @@ namespace AeroBlitz
         /// <summary>Rectángulo redondeado 9-slice para la UI.</summary>
         public static Sprite Rounded => Cached("rounded", () =>
         {
-            const int S = 64; const float R = 22f;
-            var t = NewTex(S, S);
+            const int S = 128; const float R = 44f;
+            var t = NewTex(S, S, false);
             var px = new Color[S * S];
             for (int y = 0; y < S; y++)
                 for (int x = 0; x < S; x++)
@@ -51,12 +86,12 @@ namespace AeroBlitz
                     float d = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(cx, cy));
                     px[y * S + x] = new Color(1, 1, 1, Mathf.Clamp01(R - d + 0.5f));
                 }
-            return Finish(t, px, 100, new Vector4(24, 24, 24, 24));
+            return Finish(t, px, 200, new Vector4(48, 48, 48, 48)); // esquinas igual de grandes que antes, el doble de nítidas
         });
 
         public static Sprite Circle => Cached("circle", () =>
         {
-            const int S = 64;
+            const int S = 512;
             var t = NewTex(S, S);
             var px = new Color[S * S];
             for (int y = 0; y < S; y++)
@@ -68,9 +103,25 @@ namespace AeroBlitz
             return Finish(t, px, S);
         });
 
+        /// <summary>Aro (para la carga del arma alrededor del botón de disparo; se rellena en modo radial).</summary>
+        public static Sprite Ring => Cached("ring", () =>
+        {
+            const int S = 512;
+            const float Outer = S / 2f - 1f, Inner = Outer - 44f;
+            var t = NewTex(S, S);
+            var px = new Color[S * S];
+            for (int y = 0; y < S; y++)
+                for (int x = 0; x < S; x++)
+                {
+                    float d = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(S / 2f, S / 2f));
+                    px[y * S + x] = new Color(1, 1, 1, Mathf.Clamp01(Outer - d) * Mathf.Clamp01(d - Inner));
+                }
+            return Finish(t, px, S);
+        });
+
         public static Sprite Glow => Cached("glow", () =>
         {
-            const int S = 64;
+            const int S = 128;
             var t = NewTex(S, S);
             var px = new Color[S * S];
             for (int y = 0; y < S; y++)
@@ -85,7 +136,7 @@ namespace AeroBlitz
         /// <summary>Planeta lejano: esfera con luz por un lado y borde suave (se tiñe con el color del mundo).</summary>
         public static Sprite Planet => Cached("planet", () =>
         {
-            const int S = 128;
+            const int S = 512;
             var t = NewTex(S, S);
             var px = new Color[S * S];
             var light = new Vector2(-0.45f, 0.5f).normalized;
@@ -107,7 +158,7 @@ namespace AeroBlitz
         /// <summary>Moneda dorada con borde y brillo.</summary>
         public static Sprite Coin => Cached("coin", () =>
         {
-            const int S = 64;
+            const int S = 128;
             var t = NewTex(S, S);
             var px = new Color[S * S];
             for (int y = 0; y < S; y++)
@@ -129,7 +180,7 @@ namespace AeroBlitz
         /// <summary>Icono de una mejora temporal: esfera de color con un símbolo blanco.</summary>
         public static Sprite PowerUp(PowerUpType type) => Cached("pu_" + type, () =>
         {
-            const int S = 96;
+            const int S = 192;
             var t = NewTex(S, S);
             var px = new Color[S * S];
             var col = PowerUps.ColorOf(type);
@@ -183,7 +234,7 @@ namespace AeroBlitz
         }
 
         /// <summary>Icono de un artículo (ver IconPainter). 128 px en el juego.</summary>
-        public static Sprite Icon(string key) => Cached("icon_" + key, () => Finish(NewTex(128, 128), IconPainter.Paint(key, 128), 128));
+        public static Sprite Icon(string key) => Cached("icon_" + key, () => Finish(NewTex(256, 256), IconPainter.Paint(key, 256), 256));
 
         static bool InPoly(Vector2 p, Vector2[] poly)
         {
@@ -220,39 +271,29 @@ namespace AeroBlitz
             return px;
         }
 
-        /// <summary>Nave en blanco/gris (se tiñe con la pintura elegida).</summary>
-        public static Sprite Ship(ShipDefinition def) => Cached("ship_" + def.id, () =>
-        {
-            const int S = 128;
-            var poly = new Vector2[def.shape.Length];
-            for (int i = 0; i < poly.Length; i++) poly[i] = def.shape[i] * 0.96f;
-            var px = RasterPoly(S, poly, uv =>
-            {
-                float shade = 0.65f + 0.35f * (1 - Mathf.Abs(uv.x)) + uv.y * 0.1f;
-                return new Color(shade, shade, shade, 1);
-            });
-            return Finish(NewTex(S, S), px, 100);
-        });
-
-        public static Sprite Cockpit => Cached("cockpit", () =>
-        {
-            const int S = 32;
-            var poly = new[] { new Vector2(0, 1), new Vector2(0.6f, -0.2f), new Vector2(0.4f, -0.9f), new Vector2(-0.4f, -0.9f), new Vector2(-0.6f, -0.2f) };
-            var px = RasterPoly(S, poly, uv => Color.Lerp(new Color(0.1f, 0.2f, 0.4f), new Color(0.6f, 0.95f, 1f), (uv.y + 1) / 2f));
-            return Finish(NewTex(S, S), px, 100);
-        });
+        // Las naves (cartoon, metálico, detalles, neón) y la cabina están en ShipArt.cs
 
         public static Sprite Flame => Cached("flame", () =>
         {
-            const int S = 32;
+            const int S = 128;
             var poly = new[] { new Vector2(-0.6f, 1), new Vector2(0.6f, 1), new Vector2(0, -1) };
             var px = RasterPoly(S, poly, uv => Color.Lerp(new Color(1f, 0.3f, 0.05f, 0.6f), new Color(1f, 0.95f, 0.6f, 1f), (uv.y + 1) / 2f));
-            return Finish(NewTex(S, S), px, 64);
+            return Finish(NewTex(S, S), px, 256);
+        });
+
+        /// <summary>Fuego en escala de grises (núcleo casi blanco) para teñirlo con el color de una estela.</summary>
+        public static Sprite FlameMask => Cached("flame_mask", () =>
+        {
+            const int S = 128;
+            var poly = new[] { new Vector2(-0.6f, 1), new Vector2(0.6f, 1), new Vector2(0, -1) };
+            var px = RasterPoly(S, poly, uv => Color.Lerp(new Color(0.75f, 0.75f, 0.75f, 0.55f), new Color(1f, 1f, 1f, 1f), (uv.y + 1) / 2f));
+            return Finish(NewTex(S, S), px, 256);
         });
 
         public static Sprite Asteroid(int variant) => Cached("ast_" + variant, () =>
         {
-            const int S = 96;
+            // 384 px para 0,96 unidades: el asteroide grande (x1,8) sigue nítido en pantallas QHD
+            const int S = 384;
             var rnd = new System.Random(1234 + variant * 77);
             int n = 11;
             var poly = new Vector2[n];
@@ -265,37 +306,54 @@ namespace AeroBlitz
             var craters = new List<Vector3>();
             for (int i = 0; i < 4; i++)
                 craters.Add(new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, 0.08f + (float)rnd.NextDouble() * 0.12f));
-            var baseCol = new Color(0.55f, 0.45f, 0.38f);
-            var px = RasterPoly(S, poly, uv =>
+            var baseCol = new Color(0.58f, 0.47f, 0.39f);
+            float pw = 2f / S;
+            var px = PolyPixels(S, poly, (uv, depth) =>
             {
-                float light = 0.75f + 0.25f * (uv.y - uv.x) * 0.7f;
-                var c = baseCol * light;
+                float light = 0.74f + 0.3f * (uv.y - uv.x) * 0.6f;
+                float bevel = Mathf.Clamp01(1f - depth / 0.13f);                       // canto iluminado arriba a la izquierda
+                light += bevel * 0.2f * Mathf.Clamp((uv.y - uv.x) * 1.2f, -1f, 1f);
                 foreach (var cr in craters)
-                    if (Vector2.Distance(uv, new Vector2(cr.x, cr.y)) < cr.z) c *= 0.7f;
+                {
+                    var o = uv - new Vector2(cr.x, cr.y);
+                    float d = o.magnitude;
+                    if (d < cr.z) light *= Mathf.Lerp(0.6f, 0.82f, Mathf.Clamp01((o.x - o.y) / cr.z * 0.5f + 0.5f)); // hueco con sombra
+                    light *= 1f - 0.3f * Cov(0.018f - Mathf.Abs(d - cr.z), pw);         // borde del cráter
+                }
+                light += (Hash(uv * 9f) - 0.5f) * 0.07f;                                  // textura de roca
+                var c = baseCol * light;
                 c.a = 1;
                 return c;
-            });
-            return Finish(NewTex(S, S), px, 100);
+            }, 0.045f, new Color(0.13f, 0.09f, 0.07f, 1f));
+            return Finish(NewTex(S, S), px, S / 0.96f);
         });
 
         public static Sprite Drone => Cached("drone", () =>
         {
-            const int S = 96;
+            const int S = 320;
             var poly = new Vector2[6];
             for (int i = 0; i < 6; i++) { float a = i / 6f * Mathf.PI * 2f; poly[i] = new Vector2(Mathf.Cos(a), Mathf.Sin(a) * 0.7f) * 0.95f; }
-            var px = RasterPoly(S, poly, uv =>
+            float pw = 2f / S;
+            var px = PolyPixels(S, poly, (uv, depth) =>
             {
                 float d = uv.magnitude;
-                if (d < 0.25f) return new Color(1f, 0.9f, 0.3f);
-                if (d < 0.35f) return new Color(0.2f, 0.05f, 0.05f);
-                return new Color(0.8f, 0.15f, 0.2f) * (0.8f + 0.2f * uv.y) + new Color(0, 0, 0, 1);
-            });
-            return Finish(NewTex(S, S), px, 100);
+                var body = new Color(0.82f, 0.16f, 0.22f) * (0.78f + 0.25f * uv.y);
+                body += new Color(0.25f, 0.1f, 0.1f) * Mathf.Clamp01(1f - depth / 0.1f) * Mathf.Clamp01(uv.y + 0.3f); // canto con luz
+                body *= 1f - 0.35f * Cov(0.012f - Mathf.Abs(depth - 0.16f), pw);                                       // panel
+                var eyeRing = new Color(0.18f, 0.04f, 0.05f);
+                var eye = Color.Lerp(new Color(1f, 0.75f, 0.15f), new Color(1f, 1f, 0.8f), Mathf.Clamp01(1f - d / 0.18f));
+                if ((uv - new Vector2(-0.07f, 0.07f)).magnitude < 0.06f) eye = Color.white;                             // brillo del ojo
+                var c = Color.Lerp(body, eyeRing, Cov(0.36f - d, pw));
+                c = Color.Lerp(c, eye, Cov(0.26f - d, pw));
+                c.a = 1;
+                return c;
+            }, 0.05f, new Color(0.16f, 0.03f, 0.05f, 1f));
+            return Finish(NewTex(S, S), px, S / 0.96f);
         });
 
         public static Sprite Mine => Cached("mine", () =>
         {
-            const int S = 96;
+            const int S = 320;
             int spikes = 10;
             var poly = new Vector2[spikes * 2];
             for (int i = 0; i < spikes * 2; i++)
@@ -304,33 +362,58 @@ namespace AeroBlitz
                 float r = i % 2 == 0 ? 0.98f : 0.62f;
                 poly[i] = new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * r;
             }
-            var px = RasterPoly(S, poly, uv =>
+            float pw = 2f / S;
+            var px = PolyPixels(S, poly, (uv, depth) =>
             {
                 float d = uv.magnitude;
-                if (d < 0.2f) return new Color(1f, 0.2f, 0.2f);
-                return new Color(0.25f, 0.25f, 0.3f) * (0.8f + 0.3f * uv.y) + new Color(0, 0, 0, 1);
-            });
-            return Finish(NewTex(S, S), px, 100);
+                var metal = new Color(0.3f, 0.31f, 0.37f) * (0.78f + 0.35f * uv.y);
+                metal += new Color(0.2f, 0.2f, 0.24f) * Mathf.Clamp01(1f - depth / 0.08f) * Mathf.Clamp01(uv.y - uv.x + 0.4f);
+                metal *= 1f - 0.3f * Cov(0.012f - Mathf.Abs(d - 0.42f), pw);                                            // aro
+                var core = Color.Lerp(new Color(1f, 0.15f, 0.15f), new Color(1f, 0.85f, 0.8f), Mathf.Clamp01(1f - d / 0.12f));
+                var c = Color.Lerp(metal, new Color(0.12f, 0.02f, 0.03f), Cov(0.25f - d, pw));
+                c = Color.Lerp(c, core, Cov(0.2f - d, pw));
+                c.a = 1;
+                return c;
+            }, 0.045f, new Color(0.06f, 0.06f, 0.09f, 1f));
+            return Finish(NewTex(S, S), px, S / 0.96f);
         });
 
-        /// <summary>Barra metálica con franjas de peligro (indestructible).</summary>
+        /// <summary>Barra metálica con franjas de peligro (indestructible). 2 x 0,5 unidades, igual que antes.</summary>
         public static Sprite Wall => Cached("wall", () =>
         {
-            const int W = 128, H = 32;
+            const int W = 512, H = 128;
+            const float B = 12f; // borde metálico
             var px = new Color[W * H];
+            var yellow = new Color(0.97f, 0.77f, 0.1f);
+            var dark = new Color(0.13f, 0.13f, 0.16f);
             for (int y = 0; y < H; y++)
                 for (int x = 0; x < W; x++)
                 {
-                    bool border = y < 3 || y >= H - 3 || x < 3 || x >= W - 3;
-                    bool stripe = ((x + y) / 10) % 2 == 0;
-                    px[y * W + x] = border ? new Color(0.55f, 0.6f, 0.7f) : stripe ? new Color(0.95f, 0.75f, 0.1f) : new Color(0.15f, 0.15f, 0.18f);
+                    float fx = x + 0.5f, fy = y + 0.5f;
+                    float edge = Mathf.Min(Mathf.Min(fx, W - fx), Mathf.Min(fy, H - fy));
+                    // franjas diagonales con borde suave
+                    float u = (fx + fy) / 44f;
+                    float f = u - Mathf.Floor(u);
+                    float stripe = Mathf.Clamp01((Mathf.Abs(f - 0.5f) - 0.25f) * 44f + 0.5f);
+                    var inner = Color.Lerp(dark, yellow, stripe);
+                    inner *= 0.88f + 0.18f * (fy / H);                                             // luz desde arriba
+                    // borde biselado: claro arriba, oscuro abajo, con remaches en las puntas
+                    float k = fy / H;
+                    var rim = Color.Lerp(new Color(0.38f, 0.42f, 0.5f), new Color(0.78f, 0.82f, 0.9f), k);
+                    var c = Color.Lerp(rim, inner, Mathf.Clamp01(edge - B + 0.5f));
+                    var c1 = new Vector2(B * 2.2f, H / 2f); var c2 = new Vector2(W - B * 2.2f, H / 2f);
+                    float rv = Mathf.Min((new Vector2(fx, fy) - c1).magnitude, (new Vector2(fx, fy) - c2).magnitude);
+                    c = Color.Lerp(c, new Color(0.75f, 0.78f, 0.85f), Mathf.Clamp01(9f - rv + 0.5f) * 0.9f);
+                    c = Color.Lerp(new Color(0.08f, 0.08f, 0.1f), c, Mathf.Clamp01(edge - 3f + 0.5f)); // contorno oscuro
+                    c.a = Mathf.Clamp01(edge + 0.5f);
+                    px[y * W + x] = c;
                 }
-            return Finish(NewTex(W, H), px, 64);
+            return Finish(NewTex(W, H), px, 256);
         });
 
         public static Sprite Laser => Cached("laser", () =>
         {
-            const int W = 64, H = 16;
+            const int W = 256, H = 64; // 1 x 0,25 unidades, igual que antes
             var px = new Color[W * H];
             for (int y = 0; y < H; y++)
                 for (int x = 0; x < W; x++)
@@ -338,7 +421,7 @@ namespace AeroBlitz
                     float d = Mathf.Abs(y + 0.5f - H / 2f) / (H / 2f);
                     px[y * W + x] = Color.Lerp(Color.white, new Color(1f, 0.1f, 0.3f, 0f), d * d * 1.2f);
                 }
-            return Finish(NewTex(W, H), px, 64);
+            return Finish(NewTex(W, H), px, 256);
         });
     }
 }

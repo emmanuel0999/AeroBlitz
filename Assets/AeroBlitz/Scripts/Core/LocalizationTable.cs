@@ -51,6 +51,19 @@ namespace AeroBlitz
             A("menu.settings", "Ajustes", "Settings", "Paramètres");
             A("menu.ship_fmt", "{0}  ·  Nivel de nave {1}  ·  {2} pts", "{0}  ·  Ship level {1}  ·  {2} pts", "{0}  ·  Niveau du vaisseau {1}  ·  {2} pts");
             A("menu.no_pilots", "Aún no hay pilotos. ¡Sé el primero!", "No pilots yet. Be the first!", "Aucun pilote pour l'instant. Sois le premier !");
+            A("menu.play_big", "JUGAR", "PLAY", "JOUER");
+            A("menu.play_sub_fmt", "Inicia nivel {0}", "Start level {0}", "Lancer le niveau {0}");
+            A("menu.no_lives_big", "SIN VIDAS", "NO LIVES", "PLUS DE VIES");
+            A("menu.no_lives_sub_fmt", "Nueva vida en {0} · toca para conseguir más", "New life in {0} · tap to get more", "Nouvelle vie dans {0} · touche pour en obtenir");
+            A("menu.no_lives_sub", "Toca para conseguir más vidas", "Tap to get more lives", "Touche pour obtenir des vies");
+            A("menu.level_progress_fmt", "Nivel {0} de {1}", "Level {0} of {1}", "Niveau {0} sur {1}");
+            A("menu.ship_level_fmt", "Nivel {0}", "Level {0}", "Niveau {0}");
+            A("menu.points_fmt", "{0} pts", "{0} pts", "{0} pts");
+            A("menu.streak_btn", "Racha", "Streak", "Série");
+            A("menu.streak_day_fmt", "Día {0}", "Day {0}", "Jour {0}");
+            A("menu.free_life_btn", "Vida gratis", "Free life", "Vie gratuite");
+            A("menu.watch_video", "(ver video)", "(watch video)", "(voir vidéo)");
+            A("menu.see_full_ranking", "Ver ranking completo", "See full ranking", "Voir le classement complet");
 
             // ---------------- AJUSTES ----------------
             A("set.pilot_fmt", "Piloto: {0} ({1})", "Pilot: {0} ({1})", "Pilote : {0} ({1})");
@@ -120,7 +133,7 @@ namespace AeroBlitz
             A("dlg.failed_body_fmt", "Perdiste una vida.\nVidas restantes: <b>{0}</b>\nReintentarás el nivel {1}.",
                                      "You lost a life.\nLives left: <b>{0}</b>\nYou will retry level {1}.",
                                      "Tu as perdu une vie.\nVies restantes : <b>{0}</b>\nTu vas rejouer le niveau {1}.");
-            A("dlg.failed_last_fmt", "Perdiste tu última vida.\nTus 3 vidas se recargan en {0} horas, o gana vidas viendo videos.", "You lost your last life.\nYour 3 lives refill in {0} hours, or earn lives by watching videos.", "Tu as perdu ta dernière vie.\nTes 3 vies se rechargent dans {0} heures, ou gagne des vies avec des vidéos.");
+            A("dlg.failed_last_fmt", "Perdiste tu última vida.\nTus {1} vidas se recargan en {0} horas, o gana vidas viendo videos (1 video = 1 vida).", "You lost your last life.\nYour {1} lives refill in {0} hours, or earn lives by watching videos (1 video = 1 life).", "Tu as perdu ta dernière vie.\nTes {1} vies se rechargent dans {0} heures, ou gagne des vies avec des vidéos (1 vidéo = 1 vie).");
             A("dlg.retry", "Reintentar", "Retry", "Réessayer");
             A("dlg.get_lives", "Conseguir vidas", "Get lives", "Obtenir des vies");
             A("dlg.revive_title", "¿Continuar?", "Continue?", "Continuer ?");
@@ -236,6 +249,8 @@ namespace AeroBlitz
             A("lives.bar_fmt", "Video {0}/{1}  ·  {2:0.#}%", "Video {0}/{1}  ·  {2:0.#}%", "Vidéo {0}/{1}  ·  {2:0.#} %");
             A("lives.window_limit_fmt", "Límite alcanzado. Más vidas por video en {0}", "Limit reached. More video lives in {0}", "Limite atteinte. Plus de vies par vidéo dans {0}");
             A("lives.full", "Tienes todas tus vidas.", "Your lives are full.", "Tes vies sont au complet.");
+            A("lives.video_info_one_fmt", "Cada video te da 1 vida.\nVidas por video en este período: {0}/{1}", "Each video gives you 1 life.\nVideo lives this period: {0}/{1}", "Chaque vidéo te donne 1 vie.\nVies par vidéo sur cette période : {0}/{1}");
+            A("lives.watch_btn_one", "Ver video: +1 vida", "Watch video: +1 life", "Voir une vidéo : +1 vie");
             A("lives.watch_btn_fmt", "Ver video {0}/{1}", "Watch video {0}/{1}", "Voir la vidéo {0}/{1}");
             A("toast.life_video_fmt", "Video {0}/{1} completado", "Video {0}/{1} completed", "Vidéo {0}/{1} terminée");
             A("toast.lives_refilled", "¡Tus vidas se recargaron!", "Your lives have been refilled!", "Tes vies ont été rechargées !");
@@ -243,7 +258,7 @@ namespace AeroBlitz
             A("menu.lives_timer_fmt", "Vidas {0} · {1}", "Lives {0} · {1}", "Vies {0} · {1}");
             A("menu.no_lives_timer_fmt", "SIN VIDAS  ·  {0}", "NO LIVES  ·  {0}", "PLUS DE VIES  ·  {0}");
             A("hangar.video_fmt", "Video\n{0}/{1}", "Video\n{0}/{1}", "Vidéo\n{0}/{1}");
-            A("store.free_life_desc_fmt", "3 videos = 1 vida. Progreso: {0}/{1} · Vidas por video: {2}/{3} cada {4} h", "3 videos = 1 life. Progress: {0}/{1} · Video lives: {2}/{3} every {4} h", "3 vidéos = 1 vie. Progression : {0}/{1} · Vies par vidéo : {2}/{3} toutes les {4} h");
+            A("store.free_life_desc_fmt", "1 video = 1 vida · Vidas por video: {2}/{3} cada {4} h", "1 video = 1 life · Video lives: {2}/{3} every {4} h", "1 vidéo = 1 vie · Vies par vidéo : {2}/{3} toutes les {4} h");
             A("store.open", "VER", "OPEN", "OUVRIR");
 
             // ---------------- LEGAL ----------------
@@ -287,6 +302,38 @@ namespace AeroBlitz
 
             // ---------------- NIVELES ----------------
             A("lvl.training_fmt", "Entrenamiento {0}", "Training {0}", "Entraînement {0}");
+            A("tut.step1", "ARRASTRA el dedo por la pantalla para mover tu nave", "DRAG your finger across the screen to move your ship", "GLISSE le doigt sur l'écran pour déplacer ton vaisseau");
+            A("tut.step2", "ESQUIVA los muros metálicos: no se destruyen y te quitan mucha vida", "DODGE the metal walls: they can't be destroyed and hurt a lot", "ESQUIVE les murs métalliques : indestructibles et très dangereux");
+            A("tut.step3", "Cuando la barra esté llena, pulsa el botón rojo para DISPARAR", "When the bar is full, tap the red button to FIRE", "Quand la barre est pleine, appuie sur le bouton rouge pour TIRER");
+            A("tut.step4", "Destruye asteroides y drones: ¡suman puntos!", "Destroy asteroids and drones: they give points!", "Détruis astéroïdes et drones : ils rapportent des points !");
+            A("set.rate", "Valorar el juego", "Rate the game", "Noter le jeu");
+            A("route.boss_pending", "¡JEFE PENDIENTE!", "BOSS WAITING!", "BOSS EN ATTENTE !");
+            A("route.challenge_fmt", "RETAR AL JEFE: {0}", "CHALLENGE THE BOSS: {0}", "DÉFIER LE BOSS : {0}");
+            A("route.title", "RUTA GALÁCTICA", "GALACTIC ROUTE", "ROUTE GALACTIQUE");
+            A("route.world_fmt", "Mundo {0}", "World {0}", "Monde {0}");
+            A("route.levels_fmt", "Niveles {0}-{1}", "Levels {0}-{1}", "Niveaux {0}-{1}");
+            A("route.progress_fmt", "Superados: {0}/{1}", "Cleared: {0}/{1}", "Réussis : {0}/{1}");
+            A("route.locked", "BLOQUEADO", "LOCKED", "VERROUILLÉ");
+            A("route.done", "COMPLETADO", "COMPLETED", "TERMINÉ");
+            A("route.current", "ACTUAL", "CURRENT", "ACTUEL");
+            A("route.boss_fmt", "Jefe: {0} (nivel {1})", "Boss: {0} (level {1})", "Boss : {0} (niveau {1})");
+            A("route.boss_beaten", "Jefe vencido", "Boss defeated", "Boss vaincu");
+            A("route.reward_fmt", "Recompensa: +{0} monedas y un cofre raro", "Reward: +{0} coins and a rare chest", "Récompense : +{0} pièces et un coffre rare");
+            A("route.no_boss", "Sin jefe en este mundo", "No boss in this world", "Pas de boss dans ce monde");
+            A("route.next_boss_hint", "Los jefes esperan en los niveles 10, 20, 30... 70", "Bosses wait at levels 10, 20, 30... 70", "Les boss attendent aux niveaux 10, 20, 30... 70");
+            A("route.start_fmt", "INICIAR MISIÓN · NIVEL {0}", "START MISSION · LEVEL {0}", "LANCER LA MISSION · NIVEAU {0}");
+            A("boss.destroyer", "Destructor Mecánico", "Mechanical Destroyer", "Destructeur Mécanique");
+            A("boss.spider", "Araña de Combate", "Combat Spider", "Araignée de Combat");
+            A("boss.battleship", "Acorazado Intergaláctico", "Intergalactic Battleship", "Cuirassé Intergalactique");
+            A("boss.ghost", "Nave Fantasma", "Ghost Ship", "Vaisseau Fantôme");
+            A("boss.queen", "Reina Colmena", "Hive Queen", "Reine de la Ruche");
+            A("boss.ai", "IA Suprema", "Supreme AI", "IA Suprême");
+            A("boss.emperor", "Emperador Galáctico", "Galactic Emperor", "Empereur Galactique");
+            A("boss.warning_fmt", "¡JEFE! {0}", "BOSS! {0}", "BOSS ! {0}");
+            A("boss.phase_fmt", "¡FASE {0}!", "PHASE {0}!", "PHASE {0} !");
+            A("boss.fury", "¡MODO FURIA!", "FURY MODE!", "MODE FUREUR !");
+            A("boss.defeated", "¡JEFE DERROTADO!", "BOSS DEFEATED!", "BOSS VAINCU !");
+            A("boss.reward_fmt", "¡Jefe vencido! +{0} monedas y un cofre raro", "Boss defeated! +{0} coins and a rare chest", "Boss vaincu ! +{0} pièces et un coffre rare");
             A("lvl.storm", "Tormenta de Asteroides", "Asteroid Storm", "Tempête d'Astéroïdes");
             A("lvl.w1", "Cinturón Exterior", "Outer Belt", "Ceinture Extérieure");
             A("lvl.w2", "Anillos de Hielo", "Ice Rings", "Anneaux de Glace");
@@ -307,11 +354,47 @@ namespace AeroBlitz
             A("ship.guardian", "Guardián", "Guardian", "Gardien");
             A("ship.guardian.desc", "Resistente, ideal para niveles difíciles.", "Tough, ideal for hard levels.", "Résistant, idéal pour les niveaux difficiles.");
             A("ship.phoenix", "Fénix", "Phoenix", "Phénix");
-            A("ship.phoenix.desc", "PREMIUM: carga rápida y más disparos.", "PREMIUM: fast charge and more shots.", "PREMIUM : charge rapide et plus de tirs.");
+            A("ship.hummingbird", "Colibrí", "Hummingbird", "Colibri");
+            A("ship.hummingbird.desc", "Interceptor muy veloz, poca vida.", "Very fast interceptor, low health.", "Intercepteur très rapide, peu de vie.");
+            A("ship.bastion", "Bastión", "Bastion", "Bastion");
+            A("ship.bastion.desc", "Tanque: mucha vida, pero lenta.", "Tank: lots of health, but slow.", "Tank : beaucoup de vie, mais lent.");
+            A("ship.viper", "Víbora", "Viper", "Vipère");
+            A("ship.viper.desc", "Cañón pesado: 6 disparos por carga.", "Heavy cannon: 6 shots per charge.", "Canon lourd : 6 tirs par charge.");
+            A("ship.comet", "Cometa", "Comet", "Comète");
+            A("ship.comet.desc", "Equilibrada y de carga rápida.", "Balanced with a fast charge.", "Équilibré avec une charge rapide.");
+            A("ship.specter", "Espectro", "Specter", "Spectre");
+            A("ship.specter.desc", "Esquiva: más tiempo invulnerable tras un golpe.", "Evasive: longer invulnerability after a hit.", "Esquive : plus longtemps invulnérable après un choc.");
+            A("ship.phoenix.desc", "PREMIUM: Renacer + Llamarada.", "PREMIUM: Rebirth + Flare.", "PREMIUM : Renaissance + Embrasement.");
             A("ship.titan", "Titán", "Titan", "Titan");
-            A("ship.titan.desc", "PREMIUM: el blindaje más pesado.", "PREMIUM: the heaviest armor.", "PREMIUM : le blindage le plus lourd.");
+            A("ship.titan.desc", "PREMIUM: Coraza + Escudo total.", "PREMIUM: Bulwark + Total shield.", "PREMIUM : Carapace + Bouclier total.");
             A("ship.nova", "Nova", "Nova", "Nova");
-            A("ship.nova.desc", "PREMIUM: la nave más rápida y letal.", "PREMIUM: the fastest, deadliest ship.", "PREMIUM : le vaisseau le plus rapide et le plus mortel.");
+            A("ship.nova.desc", "PREMIUM: Perforante + Hipervelocidad.", "PREMIUM: Piercing + Overdrive.", "PREMIUM : Perforant + Surrégime.");
+
+            // ---------------- HABILIDADES PREMIUM Y ESTILOS ----------------
+            A("ab.passive", "pasiva", "passive", "passive");
+            A("ab.active", "botón", "button", "bouton");
+            A("ab.rebirth", "Renacer", "Rebirth", "Renaissance");
+            A("ab.rebirth.desc", "Una vez por nivel, si te destruyen, renaces con el 40 % de vida sin ver un video.", "Once per level, if you're destroyed you come back with 40% health, no video needed.", "Une fois par niveau, si tu es détruit, tu renais avec 40 % de vie sans vidéo.");
+            A("ab.armor", "Coraza", "Bulwark", "Carapace");
+            A("ab.armor.desc", "Muros, minas y láseres te hacen cerca de la mitad de daño.", "Walls, mines and lasers do about half damage.", "Murs, mines et lasers font environ moitié moins de dégâts.");
+            A("ab.pierce", "Perforante", "Piercing", "Perforant");
+            A("ab.pierce.desc", "Todas tus balas atraviesan un obstáculo más.", "All your shots pierce one more obstacle.", "Tous tes tirs traversent un obstacle de plus.");
+            A("ab.flare", "Llamarada", "Flare", "Embrasement");
+            A("ab.flare.desc", "Onda de fuego que destruye todo lo rompible en pantalla. Cada 30 s.", "A fire wave that destroys everything breakable on screen. Every 30 s.", "Une onde de feu qui détruit tout ce qui est cassable à l'écran. Toutes les 30 s.");
+            A("ab.totalshield", "Escudo total", "Total shield", "Bouclier total");
+            A("ab.totalshield.desc", "4 segundos invulnerable. Cada 25 s.", "4 seconds of invulnerability. Every 25 s.", "4 secondes d'invulnérabilité. Toutes les 25 s.");
+            A("ab.overdrive", "Hipervelocidad", "Overdrive", "Surrégime");
+            A("ab.overdrive.desc", "3 segundos de disparo continuo sin gastar carga. Cada 25 s.", "3 seconds of nonstop fire without using charge. Every 25 s.", "3 secondes de tir continu sans utiliser la charge. Toutes les 25 s.");
+            A("toast.rebirth", "¡Renacer! El Fénix vuelve a la vida", "Rebirth! The Phoenix rises again", "Renaissance ! Le Phénix revit");
+            A("hangar.abilities", "HABILIDADES PREMIUM", "PREMIUM ABILITIES", "CAPACITÉS PREMIUM");
+            A("hangar.skin", "ESTILO", "STYLE", "STYLE");
+            A("hangar.skin_premium_only", "Solo premium", "Premium only", "Premium seul.");
+            A("skin.cartoon", "Cartoon", "Cartoon", "Cartoon");
+            A("skin.metal", "Metálico", "Metallic", "Métallique");
+            A("skin.neon", "Neón", "Neon", "Néon");
+            A("toast.metal_premium_only", "El estilo metálico es solo para naves premium", "The metallic style is for premium ships only", "Le style métallique est réservé aux vaisseaux premium");
+            A("toast.skin_temp_ship", "Compra la nave para poder cambiarle el estilo", "Buy the ship to change its style", "Achète le vaisseau pour changer son style");
+            A("toast.skin_bought_fmt", "Estilo {0} para {1}", "{0} style for {1}", "Style {0} pour {1}");
 
             // ---------------- MEJORAS ----------------
             A("up.Armor", "Blindaje", "Armor", "Blindage");
@@ -373,8 +456,9 @@ namespace AeroBlitz
             A("mis.reward_fmt", "Premio: {0}", "Reward: {0}", "Récompense : {0}");
             A("mis.rw_coins_fmt", "{0} monedas", "{0} coins", "{0} pièces");
             A("mis.rw_life", "1 vida", "1 life", "1 vie");
-            A("mis.rw_chest", "Cofre sorpresa", "Mystery chest", "Coffre surprise");
-            A("mis.rw_weekly_fmt", "Pintura exclusiva {0} + {1} monedas", "Exclusive {0} paint + {1} coins", "Peinture exclusive {0} + {1} pièces");
+            A("mis.rw_chest", "Cofre común", "Common chest", "Coffre commun");
+            A("mis.rw_weekly_fmt", "Pintura exclusiva {0} + {1} monedas + cofre épico", "Exclusive {0} paint + {1} coins + epic chest", "Peinture exclusive {0} + {1} pièces + coffre épique");
+            A("mis.rw_weekly_coins_fmt", "{0} monedas + cofre épico", "{0} coins + epic chest", "{0} pièces + coffre épique");
             A("mis.progress_fmt", "{0} / {1}", "{0} / {1}", "{0} / {1}");
             A("mis.claim", "RECLAMAR", "CLAIM", "RÉCUPÉRER");
             A("mis.claimed", "RECLAMADO", "CLAIMED", "RÉCUPÉRÉ");
@@ -384,9 +468,104 @@ namespace AeroBlitz
             A("mis.weekly_done_title", "¡Misión semanal completada!", "Weekly mission complete!", "Mission hebdo accomplie !");
             A("mis.paint_unlocked_fmt", "Nueva pintura exclusiva: {0} (equípala en el Hangar)", "New exclusive paint: {0} (equip it in the Hangar)", "Nouvelle peinture exclusive : {0} (équipe-la au Hangar)");
             A("mis.great", "¡GENIAL!", "AWESOME!", "GÉNIAL !");
-            A("chest.title", "¡Cofre abierto!", "Chest opened!", "Coffre ouvert !");
-            A("chest.upgrade_fmt", "Mejora gratis: {0} ({1})", "Free upgrade: {0} ({1})", "Amélioration gratuite : {0} ({1})");
+
+            // ---------------- COFRES Y ESTELAS ----------------
+            A("chest.tier_common", "Cofre común", "Common chest", "Coffre commun");
+            A("chest.tier_rare", "Cofre raro", "Rare chest", "Coffre rare");
+            A("chest.tier_epic", "Cofre épico", "Epic chest", "Coffre épique");
+            A("chest.earned_fmt", "+1 {0}", "+1 {0}", "+1 {0}");
+            A("chest.level_earned_fmt", "¡{0} ganado! (cada {1} niveles)", "{0} earned! (every {1} levels)", "{0} gagné ! (tous les {1} niveaux)");
+            A("chest.open_fmt", "ABRIR {0}", "OPEN {0}", "OUVRIR {0}");
+            A("chest.h_coins_fmt", "+{0} MONEDAS", "+{0} COINS", "+{0} PIÈCES");
+            A("chest.h_life", "+1 VIDA", "+1 LIFE", "+1 VIE");
+            A("chest.h_paint_fmt", "Pintura {0}", "{0} paint", "Peinture {0}");
+            A("chest.h_trail_fmt", "Estela {0}", "{0} trail", "Traînée {0}");
+            A("chest.h_upgrade_fmt", "Mejora: {0}", "Upgrade: {0}", "Amélioration : {0}");
+            A("chest.h_temp_fmt", "{0} · {1} h", "{0} · {1} h", "{0} · {1} h");
+            A("chest.d_paint", "Equípala en el Hangar", "Equip it in the Hangar", "Équipe-la au Hangar");
+            A("chest.d_trail", "Equípala en el Hangar (sección Estela)", "Equip it in the Hangar (Trail section)", "Équipe-la au Hangar (section Traînée)");
+            A("chest.d_equip", "Ya está equipado en tu nave", "Already equipped on your ship", "Déjà équipé sur ton vaisseau");
+            A("chest.d_upgrade_fmt", "Nave {0} · nivel {1}", "{0} ship · level {1}", "Vaisseau {0} · niveau {1}");
+            A("chest.d_temp_weapon_fmt", "Gratis {0} h en todas tus naves. Cómpralo en el Hangar para quedártelo.", "Free for {0} h on all your ships. Buy it in the Hangar to keep it.", "Gratuit {0} h sur tous tes vaisseaux. Achète-le au Hangar pour le garder.");
+            A("chest.weapon_ended_fmt", "Terminó tu prueba de {0}. Cómpralo en el Hangar para quedártelo", "Your {0} trial ended. Buy it in the Hangar to keep it", "L'essai de {0} est terminé. Achète-le au Hangar pour le garder");
+            A("chest.odds_title_fmt", "Probabilidades · {0}", "Odds · {0}", "Probabilités · {0}");
+            A("chest.odds_common_fmt", "{0} % monedas ({1}–{2})\n{3} % +1 vida\n{4} % pintura", "{0}% coins ({1}–{2})\n{3}% +1 life\n{4}% paint", "{0} % pièces ({1}–{2})\n{3} % +1 vie\n{4} % peinture");
+            A("chest.odds_rare_fmt", "{0} % monedas ({1}–{2})\n{3} % equipamiento o mejora gratis\n{4} % pintura o estela", "{0}% coins ({1}–{2})\n{3}% equipment or free upgrade\n{4}% paint or trail", "{0} % pièces ({1}–{2})\n{3} % équipement ou amélioration gratuite\n{4} % peinture ou traînée");
+            A("chest.odds_epic_fmt", "{0} % arma premium {1} h\n{2} % nave premium {1} h\n{3} % estela rara", "{0}% premium weapon {1} h\n{2}% premium ship {1} h\n{3}% rare trail", "{0} % arme premium {1} h\n{2} % vaisseau premium {1} h\n{3} % traînée rare");
+            A("chest.odds_note", "Los cofres solo se ganan jugando; nunca se venden. Si ya tienes el premio que toca, recibes monedas.", "Chests are only earned by playing; they are never sold. If you already own the reward, you get coins.", "Les coffres se gagnent uniquement en jouant ; ils ne sont jamais vendus. Si tu as déjà la récompense, tu reçois des pièces.");
+            A("menu.chests_fmt", "COFRES ({0})", "CHESTS ({0})", "COFFRES ({0})");
+            A("hangar.trail", "ESTELA", "TRAIL", "TRAÎNÉE");
+            A("hangar.temp_eq_fmt", "Prueba gratis · termina en {0}", "Free trial · ends in {0}", "Essai gratuit · se termine dans {0}");
+            A("toast.trail_hint_fmt", "Esta estela se consigue en un {0}", "This trail comes from a {0}", "Cette traînée s'obtient dans un {0}");
+            A("trail.default", "Normal", "Standard", "Standard");
+            A("trail.blue", "Azul Plasma", "Plasma Blue", "Bleu Plasma");
+            A("trail.green", "Verde Ácido", "Acid Green", "Vert Acide");
+            A("trail.pink", "Rosa Neón", "Neon Pink", "Rose Néon");
+            A("trail.white", "Blanco Estelar", "Star White", "Blanc Stellaire");
+            A("trail.gold", "Oro Solar", "Solar Gold", "Or Solaire");
+            A("trail.rainbow", "Arcoíris", "Rainbow", "Arc-en-ciel");
             A("time.days_fmt", "{0} d {1} h", "{0} d {1} h", "{0} j {1} h");
+
+            // ---------------- RACHA DIARIA ----------------
+            A("menu.daily_day_fmt", "Regalo · Día {0}", "Gift · Day {0}", "Cadeau · Jour {0}");
+            A("menu.streak_fmt", "Racha · Día {0}", "Streak · Day {0}", "Série · Jour {0}");
+            A("streak.title", "Racha diaria", "Daily streak", "Série quotidienne");
+            A("streak.body", "Entra cada día: el regalo mejora. Si faltas un día, la racha vuelve al día 1.", "Come back every day for bigger gifts. Miss a day and the streak goes back to day 1.", "Reviens chaque jour pour de meilleurs cadeaux. Si tu manques un jour, la série revient au jour 1.");
+            A("streak.lost_fmt", "Perdiste tu racha de {0} días. ¡Empieza otra!", "You lost your {0}-day streak. Start a new one!", "Tu as perdu ta série de {0} jours. Recommence !");
+            A("streak.day_fmt", "DÍA {0}", "DAY {0}", "JOUR {0}");
+            A("streak.done", "HECHO", "DONE", "FAIT");
+            A("streak.rw_coins_fmt", "{0}\nmonedas", "{0}\ncoins", "{0}\npièces");
+            A("streak.rw_chest", "Cofre\ncomún", "Common\nchest", "Coffre\ncommun");
+            A("streak.rw_paint", "Pintura", "Paint", "Peinture");
+            A("streak.rw_ship_fmt", "Nave\n{0} h", "Ship\n{0} h", "Vaisseau\n{0} h");
+            A("streak.claim_fmt", "RECLAMAR DÍA {0}", "CLAIM DAY {0}", "RÉCUPÉRER JOUR {0}");
+            A("streak.vip_claim", "RECLAMAR VIDAS VIP", "CLAIM VIP LIVES", "RÉCUPÉRER VIES VIP");
+            A("streak.come_back_fmt", "Vuelve mañana · {0}", "Come back tomorrow · {0}", "Reviens demain · {0}");
+            A("streak.day_title_fmt", "¡Día {0} de tu racha!", "Day {0} of your streak!", "Jour {0} de ta série !");
+            A("streak.paint_fmt", "Nueva pintura: {0} (equípala en el Hangar)", "New paint: {0} (equip it in the Hangar)", "Nouvelle peinture : {0} (équipe-la au Hangar)");
+            A("streak.ship_fmt", "Nave {0} gratis durante {1} h. ¡Ya está seleccionada!", "{0} ship free for {1} h. It's already selected!", "Vaisseau {0} gratuit pendant {1} h. Il est déjà sélectionné !");
+            A("streak.ship_ended_fmt", "Terminó tu prueba de la nave {0}. Cómprala en el Hangar para quedártela", "Your {0} ship trial ended. Buy it in the Hangar to keep it", "L'essai du vaisseau {0} est terminé. Achète-le au Hangar pour le garder");
+            A("hangar.temp_fmt", "Nave de prueba · termina en {0}", "Trial ship · ends in {0}", "Vaisseau d'essai · se termine dans {0}");
+            A("hangar.temp_info", "Nave de prueba de tu racha diaria. Cómprala para quedártela y poder mejorarla.", "Trial ship from your daily streak. Buy it to keep it and upgrade it.", "Vaisseau d'essai de ta série quotidienne. Achète-le pour le garder et l'améliorer.");
+            A("hangar.streak_paint", "Racha día 5", "Streak day 5", "Série jour 5");
+            A("store.streak_fmt", "Día {0} de 7: monedas, cofre, pintura y una nave premium el día 7.", "Day {0} of 7: coins, chest, paint and a premium ship on day 7.", "Jour {0} sur 7 : pièces, coffre, peinture et un vaisseau premium au jour 7.");
+            A("store.streak_vip_fmt", "Día {0} de 7, más 3 vidas VIP cada día.", "Day {0} of 7, plus 3 VIP lives every day.", "Jour {0} sur 7, plus 3 vies VIP chaque jour.");
+            A("toast.streak_paint_hint", "Esta pintura se gana el día 5 de la racha diaria", "Earn this paint on day 5 of the daily streak", "Gagne cette peinture au jour 5 de la série quotidienne");
+            A("paint.carbon", "Carbono", "Carbon", "Carbone");
+            A("paint.sakura", "Sakura", "Sakura", "Sakura");
+            A("paint.mint", "Menta", "Mint", "Menthe");
+
+            // ---------------- LOGROS ----------------
+            A("menu.achievements", "Logros", "Achievements", "Succès");
+            A("ach.title_fmt", "Logros {0}/{1}", "Achievements {0}/{1}", "Succès {0}/{1}");
+            A("ach.locked", "BLOQUEADO", "LOCKED", "VERROUILLÉ");
+            A("ach.unlocked_fmt", "¡Logro desbloqueado! {0}", "Achievement unlocked! {0}", "Succès débloqué ! {0}");
+            A("ach.unlocked_many_fmt", "¡{0} logros desbloqueados! Míralos en Logros", "{0} achievements unlocked! See them in Achievements", "{0} succès débloqués ! Vois-les dans Succès");
+            A("ach.level_done_fmt", "Logro desbloqueado: {0} (reclámalo en Logros)", "Achievement unlocked: {0} (claim it in Achievements)", "Succès débloqué : {0} (récupère-le dans Succès)");
+            A("ach.first_flight", "Primer Vuelo", "First Flight", "Premier Vol");
+            A("ach.first_flight.desc", "Completa el nivel 1", "Clear level 1", "Termine le niveau 1");
+            A("ach.world1", "Primer Mundo", "First World", "Premier Monde");
+            A("ach.world1.desc", "Completa el mundo 1 (nivel 7)", "Clear world 1 (level 7)", "Termine le monde 1 (niveau 7)");
+            A("ach.storm", "Ojo de la Tormenta", "Eye of the Storm", "Œil de la Tempête");
+            A("ach.storm.desc", "Supera un nivel de tormenta (10, 20, 30...)", "Clear a storm level (10, 20, 30...)", "Termine un niveau de tempête (10, 20, 30...)");
+            A("ach.survivor", "Sobreviviente", "Survivor", "Survivant");
+            A("ach.survivor.desc", "Completa {0} niveles seguidos sin morir", "Clear {0} levels in a row without dying", "Termine {0} niveaux d'affilée sans mourir");
+            A("ach.untouchable", "Intocable", "Untouchable", "Intouchable");
+            A("ach.untouchable.desc", "Completa {0} niveles sin recibir daño", "Clear {0} levels without taking damage", "Termine {0} niveaux sans subir de dégâts");
+            A("ach.collector", "Coleccionista", "Collector", "Collectionneur");
+            A("ach.collector.desc", "Recoge {0} monedas en los niveles", "Collect {0} coins in levels", "Ramasse {0} pièces dans les niveaux");
+            A("ach.drone_hunter", "Cazador de Drones", "Drone Hunter", "Chasseur de Drones");
+            A("ach.drone_hunter.desc", "Destruye {0} drones", "Destroy {0} drones", "Détruis {0} drones");
+            A("ach.asteroid_hunter", "Cazador de Asteroides", "Asteroid Hunter", "Chasseur d'Astéroïdes");
+            A("ach.asteroid_hunter.desc", "Destruye {0} asteroides", "Destroy {0} asteroids", "Détruis {0} astéroïdes");
+            A("ach.fleet", "Flota Estelar", "Star Fleet", "Flotte Stellaire");
+            A("ach.fleet.desc", "Consigue {0} naves", "Own {0} ships", "Possède {0} vaisseaux");
+            A("ach.agent", "Agente Estelar", "Star Agent", "Agent Stellaire");
+            A("ach.agent.desc", "Reclama {0} premios de misiones", "Claim {0} mission rewards", "Récupère {0} récompenses de missions");
+            A("ach.world5", "Medio Camino", "Halfway There", "À Mi-Chemin");
+            A("ach.world5.desc", "Completa el mundo 5 (nivel 35)", "Clear world 5 (level 35)", "Termine le monde 5 (niveau 35)");
+            A("ach.master", "Maestro Aero Blitz", "Aero Blitz Master", "Maître Aero Blitz");
+            A("ach.master.desc", "Termina los {0} niveles", "Beat all {0} levels", "Termine les {0} niveaux");
 
             // ---------------- PRODUCTOS (dinero real) ----------------
             A("prod.starter_pack", "Pack de Inicio", "Starter Pack", "Pack de Départ");
@@ -406,11 +585,11 @@ namespace AeroBlitz
             A("prod.coins_large", "15.000 Monedas", "15,000 Coins", "15 000 Pièces");
             A("prod.coins_large.desc", "Bóveda de monedas (+50%).", "Vault of coins (+50%).", "Chambre forte de pièces (+50 %).");
             A("prod.ship_phoenix", "Nave Fénix", "Phoenix Ship", "Vaisseau Phénix");
-            A("prod.ship_phoenix.desc", "6 disparos, carga rápida.", "6 shots, fast charge.", "6 tirs, charge rapide.");
+            A("prod.ship_phoenix.desc", "Metálica · 6 disparos · Renacer + Llamarada.", "Metallic · 6 shots · Rebirth + Flare.", "Métallique · 6 tirs · Renaissance + Embrasement.");
             A("prod.ship_titan", "Nave Titán", "Titan Ship", "Vaisseau Titan");
-            A("prod.ship_titan.desc", "230 de vida, 7 disparos.", "230 health, 7 shots.", "230 de vie, 7 tirs.");
+            A("prod.ship_titan.desc", "Metálica · 230 de vida · Coraza + Escudo total.", "Metallic · 230 health · Bulwark + Total shield.", "Métallique · 230 de vie · Carapace + Bouclier total.");
             A("prod.ship_nova", "Nave Nova", "Nova Ship", "Vaisseau Nova");
-            A("prod.ship_nova.desc", "La más rápida, 8 disparos.", "The fastest, 8 shots.", "Le plus rapide, 8 tirs.");
+            A("prod.ship_nova.desc", "Metálica · la más rápida · Perforante + Hipervelocidad.", "Metallic · the fastest · Piercing + Overdrive.", "Métallique · le plus rapide · Perforant + Surrégime.");
             A("prod.eq_plasma_shield", "Escudo de Plasma", "Plasma Shield", "Bouclier Plasma");
             A("prod.eq_plasma_shield.desc", "Bloquea 2 impactos por nivel.", "Blocks 2 hits per level.", "Bloque 2 impacts par niveau.");
             A("prod.eq_twin_cannon", "Cañón Doble", "Twin Cannon", "Canon Double");

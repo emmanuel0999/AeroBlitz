@@ -49,7 +49,7 @@ CARACTERÍSTICAS
 • Naves, mejoras y equipamiento.
 • Rankings mundial y por país.
 • En español, inglés y francés.
-• 3 vidas que se recargan con el tiempo.
+• 5 vidas que se recargan con el tiempo (o 1 video = 1 vida).
 
 Aero Blitz es gratis. Contiene anuncios y compras opcionales dentro de la aplicación (monedas, vidas, naves, equipamiento, quitar anuncios y suscripción VIP). No hace falta comprar nada para terminar el juego.
 
@@ -101,7 +101,7 @@ CARACTÉRISTIQUES
 • Vaisseaux, améliorations et équipement.
 • Classements mondial et par pays.
 • En français, anglais et espagnol.
-• 3 vies qui se rechargent avec le temps.
+• 5 vies qui se rechargent avec le temps (ou 1 vidéo = 1 vie).
 
 Aero Blitz est gratuit. Il contient des publicités et des achats intégrés facultatifs (pièces, vies, vaisseaux, équipement, suppression des publicités et abonnement VIP). Aucun achat n'est nécessaire pour terminer le jeu.
 

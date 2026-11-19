@@ -8,7 +8,7 @@ namespace AeroBlitz
     /// Controla una partida: nave, obstáculos, disparos, colisiones y fin de nivel.
     /// Todo se mueve manualmente (sin física) para que sea ligero y determinista en móvil.
     /// </summary>
-    public class GameplayController : MonoBehaviour
+    public partial class GameplayController : MonoBehaviour
     {
         public enum RunState { Idle, Running, Paused, Dying, AwaitingRevive, Ended }
 
@@ -27,10 +27,11 @@ namespace AeroBlitz
             public float spin;
             public float phase;
             public float flash;
+            public float baseScale = 1f;
             public Color baseColor = Color.white;
         }
 
-        class Projectile { public Transform tr; public Vector2 vel; public int pierce; public HashSet<Obstacle> hits; }
+        class Projectile { public Transform tr; public Vector2 vel; public int pierce; public HashSet<Obstacle> hits; public bool hitBoss; }
         class Pickup { public Transform tr; public bool coin; public PowerUpType type; public string trial; public Vector2 vel; public float phase, radius; }
         class Missile { public Transform tr; public Vector2 vel; public Obstacle target; public float life; }
         class Particle { public Transform tr; public SpriteRenderer sr; public Vector2 vel; public float life, maxLife; }
@@ -40,9 +41,11 @@ namespace AeroBlitz
         public float Health { get; private set; }
         public float MaxHealth => _stats.maxHealth;
         public int ShieldHits { get; private set; }
-        public float Progress01 => _cfg == null ? 0 : Mathf.Clamp01(_time / _cfg.duration);
+        public float Progress01 => _cfg == null ? 0 : _cfg.boss ? 1f - BossHp01 : Mathf.Clamp01(_time / _cfg.duration);
         public WeaponSystem Weapon { get; } = new WeaponSystem();
         public int Destroyed { get; private set; }
+        /// <summary>Segundos jugados en este nivel (el tutorial lo usa para cambiar de consejo).</summary>
+        public float RunTime => _time;
         public int KillPoints { get; private set; }
 
         // Monedas y mejoras temporales (desde el nivel GameConfig.PickupsFromLevel)
@@ -69,14 +72,29 @@ namespace AeroBlitz
         public float OverchargeTime { get; private set; }
         public float MagnetTime { get; private set; }
 
+        // Habilidades de las naves premium (pasiva siempre activa + botón con tiempo de espera)
+        ShipDefinition _shipDef;
+        public ActiveAbility Ability => _shipDef != null ? _shipDef.active : ActiveAbility.None;
+        public float AbilityCooldown { get; private set; }  // segundos hasta poder usarla
+        public float AbilityActiveTime { get; private set; } // segundos que le quedan activa (escudo / hipervelocidad)
+        bool _rebirthUsed;
+        float _overdriveTimer;
+        SpriteRenderer _detailSr, _auraSr;
+        readonly List<SpriteRenderer> _tipLights = new List<SpriteRenderer>();
+        Color _bulletColor;
+
         Camera _cam;
         Transform _world;
         Transform _ship;
         SpriteRenderer _shipSr, _shieldSr;
         Transform _flame;
+        SpriteRenderer _flameSr;
+        bool _rainbowFlame;
         LevelConfig _cfg;
         ShipStats _stats;
         float _time, _spawnTimer, _invuln, _dyingTimer, _shake;
+        /// <summary>Distancia mínima de la nave al borde inferior: no baja detrás de la fila de botones.</summary>
+        float BottomLimit => Mathf.Max(1.3f, 2f * _halfH * HUDScreen.BottomReserve01);
         bool _revived;
         Vector2 _dragOffset;
         bool _dragging;
@@ -139,34 +157,78 @@ namespace AeroBlitz
             Destroyed = 0; KillPoints = 0; TookDamage = false;
             SetupPickups(level);
             SetupMissiles(stats.missiles);
+            BossSetup(level);
+            SpriteFactory.PrepareBoss(BossCatalog.ForLevel(level + 1)); // el jefe del próximo nivel se dibuja en segundo plano
+
+            _shipDef = ShipCatalog.Get(shipId);
+            var look = ShipLook.Of(_shipDef, GameManager.Instance.Data.GetShip(shipId));
+            _bulletColor = _shipDef.bulletColor;
+            _rebirthUsed = false;
+            AbilityCooldown = _shipDef.active != ActiveAbility.None ? GameConfig.AbilityFirstCooldown : 0f;
+            AbilityActiveTime = 0f;
 
             _ship = new GameObject("PlayerShip").transform;
             _ship.SetParent(_world);
-            _ship.position = new Vector3(0, -_halfH + 2.5f, 0);
+            _ship.position = new Vector3(0, -_halfH + Mathf.Max(2.5f, BottomLimit + 0.2f), 0);
             _shipSr = _ship.gameObject.AddComponent<SpriteRenderer>();
-            _shipSr.sprite = SpriteFactory.Ship(ShipCatalog.Get(shipId));
-            _shipSr.color = stats.color;
+            _shipSr.sprite = look.hull;          // cartoon, metálico (premium) o base neón
+            _shipSr.color = look.hullColor;
             _shipSr.sortingOrder = 10;
+
+            _detailSr = new GameObject("Detail").AddComponent<SpriteRenderer>();
+            _detailSr.transform.SetParent(_ship, false);
+            _detailSr.sprite = look.detail;      // franjas y borde dorado, o el brillo neón
+            _detailSr.color = look.detailColor;
+            _detailSr.sortingOrder = 11;
 
             var cockpit = new GameObject("Cockpit").AddComponent<SpriteRenderer>();
             cockpit.transform.SetParent(_ship, false);
-            cockpit.transform.localPosition = new Vector3(0, 0.12f, 0);
+            cockpit.transform.localPosition = new Vector3(0, _shipDef.cockpitY * SpriteFactory.ShipUnit, 0);
             cockpit.sprite = SpriteFactory.Cockpit;
-            cockpit.sortingOrder = 11;
+            cockpit.sortingOrder = 12;
+
+            // Premium: aura que late detrás de la nave y luces en las puntas de las alas
+            _tipLights.Clear();
+            _auraSr = null;
+            if (_shipDef.IsPremium)
+            {
+                _auraSr = new GameObject("Aura").AddComponent<SpriteRenderer>();
+                _auraSr.transform.SetParent(_ship, false);
+                _auraSr.transform.localScale = Vector3.one * 2.6f;
+                _auraSr.sprite = SpriteFactory.Glow;
+                _auraSr.sortingOrder = 8;
+                Vector2 tip = Vector2.zero;
+                foreach (var v in _shipDef.shape) if (v.x > tip.x) tip = v;
+                foreach (float side in new[] { 1f, -1f })
+                {
+                    var l = new GameObject("TipLight").AddComponent<SpriteRenderer>();
+                    l.transform.SetParent(_ship, false);
+                    l.transform.localPosition = new Vector3(tip.x * side * SpriteFactory.ShipUnit, tip.y * SpriteFactory.ShipUnit, 0);
+                    l.transform.localScale = Vector3.one * 0.32f;
+                    l.sprite = SpriteFactory.Glow;
+                    l.sortingOrder = 12;
+                    _tipLights.Add(l);
+                }
+            }
 
             var flame = new GameObject("Flame").AddComponent<SpriteRenderer>();
             flame.transform.SetParent(_ship, false);
-            flame.transform.localPosition = new Vector3(0, -0.65f, 0);
-            flame.sprite = SpriteFactory.Flame;
+            flame.transform.localPosition = new Vector3(0, _shipDef.flameY * SpriteFactory.ShipUnit - 0.2f, 0);
+            // Estela: el fuego naranja original, o uno blanco teñido con el color de la estela
+            var trail = UpgradeCatalog.GetTrail(stats.trailId);
+            flame.sprite = trail.id == "default" ? SpriteFactory.Flame : SpriteFactory.FlameMask;
+            flame.color = trail.color;
             flame.sortingOrder = 9;
             _flame = flame.transform;
+            _flameSr = flame;
+            _rainbowFlame = trail.animated;
 
             _shieldSr = new GameObject("Shield").AddComponent<SpriteRenderer>();
             _shieldSr.transform.SetParent(_ship, false);
             _shieldSr.transform.localScale = Vector3.one * 1.9f;
             _shieldSr.sprite = SpriteFactory.Glow;
             _shieldSr.color = new Color(0.3f, 0.7f, 1f, 0.45f);
-            _shieldSr.sortingOrder = 12;
+            _shieldSr.sortingOrder = 13;
             _shieldSr.enabled = ShieldHits > 0;
 
             State = RunState.Running;
@@ -181,6 +243,7 @@ namespace AeroBlitz
             foreach (var m in _missiles) Destroy(m.tr.gameObject);
             _missiles.Clear();
             _obstacles.Clear(); _projectiles.Clear(); _particles.Clear(); _pickups.Clear();
+            BossClear();
             Weapon.ChargeRateMultiplier = 1f;
             if (_ship != null) Destroy(_ship.gameObject);
             _ship = null;
@@ -233,22 +296,100 @@ namespace AeroBlitz
         {
             if (State != RunState.Running) return;
             if (!Weapon.TryFire()) return;
+            SpawnVolley();
+        }
+
+        /// <summary>Una ráfaga según el cañón (también la usa la Hipervelocidad de la Nova, sin gastar carga).</summary>
+        void SpawnVolley()
+        {
             AudioFX.Instance.Play(AudioFX.Sfx.Shoot, 0.7f);
             Vector2 pos = _ship.position + Vector3.up * 0.7f;
+            int extra = _shipDef != null && _shipDef.passive == PassiveAbility.Pierce ? GameConfig.PiercePassiveExtra : 0; // Nova: Perforante
             switch (CannonTier)
             {
-                case 0: SpawnProjectile(pos); break;
+                case 0: SpawnProjectile(pos, null, extra); break;
                 case 1: // Cañón Doble
-                    SpawnProjectile(pos + Vector2.left * 0.3f);
-                    SpawnProjectile(pos + Vector2.right * 0.3f);
+                    SpawnProjectile(pos + Vector2.left * 0.3f, null, extra);
+                    SpawnProjectile(pos + Vector2.right * 0.3f, null, extra);
                     break;
                 case 2: // Cañón Triple: abanico de 3
-                    foreach (float a in new[] { -16f, 0f, 16f }) SpawnProjectile(pos, Fan(a));
+                    foreach (float a in new[] { -16f, 0f, 16f }) SpawnProjectile(pos, Fan(a), extra);
                     break;
                 default: // Cañón de Plasma: abanico de 5 que atraviesa rompibles
-                    foreach (float a in new[] { -30f, -15f, 0f, 15f, 30f }) SpawnProjectile(pos, Fan(a), GameConfig.PlasmaPierce, true);
+                    foreach (float a in new[] { -30f, -15f, 0f, 15f, 30f }) SpawnProjectile(pos, Fan(a), GameConfig.PlasmaPierce + extra, true);
                     break;
             }
+        }
+
+        // ---------------- HABILIDAD CON BOTÓN (PREMIUM) ----------------
+        public bool AbilityReady => Ability != ActiveAbility.None && AbilityCooldown <= 0f && AbilityActiveTime <= 0f;
+
+        public void AbilityPressed()
+        {
+            if (State != RunState.Running || !AbilityReady) return;
+            switch (Ability)
+            {
+                case ActiveAbility.Flare:
+                    AbilityCooldown = GameConfig.FlareCooldown;
+                    StartCoroutine(FlareWave());
+                    break;
+                case ActiveAbility.TotalShield:
+                    AbilityActiveTime = GameConfig.TotalShieldSeconds;
+                    AbilityCooldown = GameConfig.TotalShieldCooldown;
+                    AudioFX.Instance.Play(AudioFX.Sfx.Shield);
+                    break;
+                case ActiveAbility.Overdrive:
+                    AbilityActiveTime = GameConfig.OverdriveSeconds;
+                    AbilityCooldown = GameConfig.OverdriveCooldown;
+                    _overdriveTimer = 0f;
+                    AudioFX.Instance.Play(AudioFX.Sfx.PowerUp);
+                    break;
+            }
+        }
+
+        void UpdateAbility(float dt)
+        {
+            if (Ability == ActiveAbility.None) return;
+            if (AbilityActiveTime > 0f)
+            {
+                AbilityActiveTime = Mathf.Max(0f, AbilityActiveTime - dt);
+                if (Ability == ActiveAbility.Overdrive) // Nova: disparo continuo sin gastar carga
+                {
+                    _overdriveTimer -= dt;
+                    if (_overdriveTimer <= 0f) { SpawnVolley(); _overdriveTimer = GameConfig.OverdriveFireInterval; }
+                }
+            }
+            else if (AbilityCooldown > 0f) AbilityCooldown = Mathf.Max(0f, AbilityCooldown - dt);
+        }
+
+        /// <summary>Fénix: onda de fuego que destruye todo lo rompible en pantalla.</summary>
+        System.Collections.IEnumerator FlareWave()
+        {
+            AudioFX.Instance.Play(AudioFX.Sfx.Explosion);
+            _shake = 0.5f;
+            BossFlareHit();
+            var ring = new GameObject("Flare").AddComponent<SpriteRenderer>();
+            ring.transform.SetParent(_world);
+            ring.transform.position = _ship.position;
+            ring.sprite = SpriteFactory.Glow;
+            ring.sortingOrder = 14;
+            for (int i = _obstacles.Count - 1; i >= 0; i--)
+            {
+                var o = _obstacles[i];
+                if (!o.destructible || o.tr.position.y > _halfH + 0.5f) continue;
+                Destroyed++;
+                KillPoints += LevelDatabase.PointsForDestroying(o.type);
+                CountForMissions(o.type);
+                RemoveObstacle(i, true);
+            }
+            for (float t = 0; t < 0.45f && ring != null; t += Time.deltaTime)
+            {
+                float p = t / 0.45f;
+                ring.transform.localScale = Vector3.one * Mathf.Lerp(1f, 22f, p);
+                ring.color = new Color(1f, 0.55f, 0.15f, 0.85f * (1f - p));
+                yield return null;
+            }
+            if (ring != null) Destroy(ring.gameObject);
         }
 
         static Vector2 Fan(float angleDeg)
@@ -280,9 +421,10 @@ namespace AeroBlitz
             _time += dt;
             HandleInput(dt);
             Weapon.Tick(dt);
+            UpdateAbility(dt);
 
             // Generación de obstáculos (se detiene poco antes del final)
-            if (_time < _cfg.duration - 2.5f)
+            if (!_cfg.boss && _time < _cfg.duration - 2.5f)
             {
                 _spawnTimer -= dt;
                 if (_spawnTimer <= 0)
@@ -294,21 +436,24 @@ namespace AeroBlitz
 
             if (PickupsEnabled) UpdatePickupSpawns(dt);
 
+            if (_cfg.boss) BossTick(dt);
             UpdateProjectiles(dt);
             UpdateMissiles(dt);
             UpdateObstacles(dt);
             if (State == RunState.Running) { UpdatePickups(dt); UpdatePowerUpTimers(dt); }
             UpdateShipVisuals(dt);
 
-            if (_time >= _cfg.duration)
-            {
-                State = RunState.Ended;
-                var r = new LevelResult { level = Level, destroyed = Destroyed, killPoints = KillPoints, healthPercent = Health / _stats.maxHealth, pickupCoins = RunCoins, trialProductId = TrialProductId,
-                                          coinPickups = RunCoinPickups, tookDamage = TookDamage };
-                Stop();
-                State = RunState.Ended;
-                GameManager.Instance.OnLevelCompleted(r);
-            }
+            if (!_cfg.boss ? _time >= _cfg.duration : BossFinished) FinishLevel();
+        }
+
+        void FinishLevel()
+        {
+            State = RunState.Ended;
+            var r = new LevelResult { level = Level, destroyed = Destroyed, killPoints = KillPoints, healthPercent = Health / _stats.maxHealth, pickupCoins = RunCoins, trialProductId = TrialProductId,
+                                      coinPickups = RunCoinPickups, tookDamage = TookDamage, died = _revived, bossDefeated = _cfg.boss };
+            Stop();
+            State = RunState.Ended;
+            GameManager.Instance.OnLevelCompleted(r);
         }
 
         void HandleInput(float dt)
@@ -353,12 +498,13 @@ namespace AeroBlitz
             if (axis.sqrMagnitude > 0.01f) { target = pos + axis.normalized * 2f; hasTarget = true; }
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J)) FirePressed();
             if (Input.GetKeyDown(KeyCode.M) || Input.GetKeyDown(KeyCode.K)) MissilePressed();
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.L)) AbilityPressed();
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)) { Pause(); return; }
 
             float maxStep = _stats.speed * 1.6f * dt;
             Vector2 newPos = hasTarget ? Vector2.MoveTowards(pos, target, maxStep) : pos;
             newPos.x = Mathf.Clamp(newPos.x, -_halfW + 0.6f, _halfW - 0.6f);
-            newPos.y = Mathf.Clamp(newPos.y, -_halfH + 1.3f, _halfH * 0.35f);
+            newPos.y = Mathf.Clamp(newPos.y, -_halfH + BottomLimit, _halfH * (_cfg.boss ? 0.1f : 0.35f)); // contra un jefe no se sube hasta él
             float vx = (newPos.x - pos.x) / Mathf.Max(dt, 0.0001f);
             _ship.position = newPos;
             _ship.rotation = Quaternion.Lerp(_ship.rotation, Quaternion.Euler(0, 0, -vx * 2.2f), 10f * dt);
@@ -368,12 +514,29 @@ namespace AeroBlitz
         {
             _invuln -= dt;
             _shipSr.enabled = _invuln <= 0 || Mathf.Repeat(Time.time * 12f, 1f) > 0.35f;
-            _shieldSr.enabled = ShieldHits > 0 || TempShieldTime > 0;
-            // Escudo temporal: dorado y parpadea en sus últimos 2 segundos
-            _shieldSr.color = TempShieldTime > 0 ? new Color(1f, 0.85f, 0.35f, TempShieldTime < 2f && Mathf.Repeat(Time.time * 6f, 1f) < 0.4f ? 0.15f : 0.5f)
-                                                 : new Color(0.3f, 0.7f, 1f, 0.45f);
+            _detailSr.enabled = _shipSr.enabled;
+            bool totalShield = Ability == ActiveAbility.TotalShield && AbilityActiveTime > 0;
+            _shieldSr.enabled = ShieldHits > 0 || TempShieldTime > 0 || totalShield;
+            // Escudo total del Titán: púrpura intenso. Escudo temporal: dorado y parpadea en sus últimos 2 segundos
+            _shieldSr.color = totalShield ? new Color(0.8f, 0.55f, 1f, AbilityActiveTime < 1f && Mathf.Repeat(Time.time * 8f, 1f) < 0.4f ? 0.3f : 0.75f)
+                            : TempShieldTime > 0 ? new Color(1f, 0.85f, 0.35f, TempShieldTime < 2f && Mathf.Repeat(Time.time * 6f, 1f) < 0.4f ? 0.15f : 0.5f)
+                            : new Color(0.3f, 0.7f, 1f, 0.45f);
+            // Premium: el aura late y las luces de las alas parpadean alternadas
+            if (_auraSr != null)
+            {
+                var a = _shipDef.accent;
+                bool boost = AbilityActiveTime > 0;
+                _auraSr.color = new Color(a.r, a.g, a.b, (boost ? 0.55f : 0.28f) + Mathf.Sin(Time.time * 3f) * 0.08f);
+                _auraSr.enabled = _shipSr.enabled;
+                for (int i = 0; i < _tipLights.Count; i++)
+                {
+                    bool on = Mathf.Repeat(Time.time * 1.6f + i * 0.5f, 1f) < 0.5f;
+                    _tipLights[i].color = on ? new Color(1f, 0.95f, 0.7f, 0.95f) : new Color(1f, 0.8f, 0.3f, 0.2f);
+                }
+            }
             if (_shieldSr.enabled) _shieldSr.transform.localScale = Vector3.one * (1.85f + Mathf.Sin(Time.time * 6f) * 0.08f);
             _flame.localScale = new Vector3(0.9f, 0.8f + Random.value * 0.5f, 1);
+            if (_rainbowFlame) _flameSr.color = Color.HSVToRGB(Mathf.Repeat(Time.time * 0.6f, 1f), 0.75f, 1f);
         }
 
         void UpdateStars(float dt, float mult)
@@ -518,9 +681,15 @@ namespace AeroBlitz
                 if (o.type == ObstacleType.Drone) o.vel.x = Mathf.Sin(o.phase * 2.5f) * 2.2f;
                 if (o.type == ObstacleType.Mine) o.vel.x = Mathf.Clamp(shipPos.x - o.tr.position.x, -1f, 1f) * 0.6f;
                 if (o.type == ObstacleType.LaserGate) o.sr.color = new Color(1, 1, 1, 0.75f + Mathf.Sin(o.phase * 20f) * 0.25f);
+                if (o.type == ObstacleType.BossShot) o.tr.localScale = Vector3.one * (o.baseScale * (1f + Mathf.Sin(o.phase * 14f) * 0.12f));
 
                 Vector2 p = (Vector2)o.tr.position + o.vel * dt;
-                if (!o.box && Mathf.Abs(p.x) > _halfW - o.radius) { o.vel.x = -o.vel.x; p.x = Mathf.Clamp(p.x, -_halfW + o.radius, _halfW - o.radius); }
+                if (o.type == ObstacleType.BossShot)
+                {
+                    // Los disparos del jefe no rebotan: salen de la pantalla y desaparecen
+                    if (Mathf.Abs(p.x) > _halfW + 3f || p.y > _halfH + 5f) { RemoveObstacle(i, false); continue; }
+                }
+                else if (!o.box && Mathf.Abs(p.x) > _halfW - o.radius) { o.vel.x = -o.vel.x; p.x = Mathf.Clamp(p.x, -_halfW + o.radius, _halfW - o.radius); }
                 o.tr.position = p;
                 if (o.spin != 0) o.tr.Rotate(0, 0, o.spin * dt);
 
@@ -534,7 +703,7 @@ namespace AeroBlitz
                     o.hitPlayer = true;
                     HitPlayer(o);
                     if (State != RunState.Running) return;
-                    if (o.destructible || o.type == ObstacleType.Mine) RemoveObstacle(i, true);
+                    if (o.destructible || o.type == ObstacleType.Mine || o.type == ObstacleType.BossShot) RemoveObstacle(i, true);
                 }
             }
         }
@@ -553,6 +722,7 @@ namespace AeroBlitz
 #if UNITY_EDITOR
             if (TrailerCheats.Invincible) return; // solo para grabar el video promocional
 #endif
+            if (Ability == ActiveAbility.TotalShield && AbilityActiveTime > 0) return; // Titán: Escudo total
             if (TempShieldTime > 0)
             {
                 TempShieldTime = 0f; // absorbe un choque y se gasta
@@ -569,16 +739,29 @@ namespace AeroBlitz
             }
             // Indestructibles (muro, mina, láser): quitan un % fijo de la vida máxima (50 %, o 25 % desde el nivel 25).
             // Rompibles: daño según tipo, nivel y blindaje.
-            float dmg = o.destructible
+            float dmg = o.type == ObstacleType.BossShot
+                ? _stats.maxHealth * GameConfig.BossShotDamageFor(Level) * (1f - _stats.damageReduction) * (_shipDef.passive == PassiveAbility.Armor ? GameConfig.BossShotArmorFactor : 1f)
+                : o.destructible
                 ? LevelDatabase.BaseDamage(o.type) * _cfg.damageMultiplier * (1f - _stats.damageReduction)
-                : _stats.maxHealth * GameConfig.IndestructibleDamageFor(Level);
+                : _stats.maxHealth * GameConfig.IndestructibleDamageFor(Level, _shipDef.passive == PassiveAbility.Armor); // Titán: Coraza
             Health -= dmg;
             TookDamage = true;
-            _invuln = 1f;
+            _invuln = 1f + _shipDef.invulnBonus; // Espectro: más tiempo invulnerable
             _shake = 0.35f;
             AudioFX.Instance.Play(AudioFX.Sfx.Hit);
             AudioFX.Vibrate();
             UIManager.Instance.FlashDamage();
+            if (Health <= 0 && _shipDef.passive == PassiveAbility.Rebirth && !_rebirthUsed)
+            {
+                // Fénix: Renacer (una vez por nivel, sin video)
+                _rebirthUsed = true;
+                Health = _stats.maxHealth * GameConfig.RebirthHealthPercent;
+                _invuln = 2.5f;
+                Explode(_ship.position, new Color(1f, 0.6f, 0.15f), 50, 1.8f);
+                AudioFX.Instance.Play(AudioFX.Sfx.PowerUp);
+                UIManager.Instance.Toast(L.T("toast.rebirth"));
+                return;
+            }
             if (Health <= 0)
             {
                 Health = 0;
@@ -590,12 +773,8 @@ namespace AeroBlitz
             }
         }
 
-        /// <summary>Drones y asteroides destruidos suman a las misiones en el momento (cuentan aunque luego se pierda el nivel).</summary>
-        static void CountForMissions(ObstacleType t)
-        {
-            if (t == ObstacleType.Drone) GameManager.Instance.MissionEvent(MissionType.DestroyDrones, 1);
-            else if (t == ObstacleType.SmallAsteroid || t == ObstacleType.BigAsteroid) GameManager.Instance.MissionEvent(MissionType.DestroyAsteroids, 1);
-        }
+        /// <summary>Drones y asteroides destruidos suman a misiones y logros en el momento (cuentan aunque luego se pierda el nivel).</summary>
+        static void CountForMissions(ObstacleType t) => GameManager.Instance.ObstacleDestroyed(t);
 
         void RemoveObstacle(int i, bool explode)
         {
@@ -621,13 +800,15 @@ namespace AeroBlitz
             go.transform.localScale = new Vector3(0.22f, 0.55f, 1f);
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = SpriteFactory.Circle;
-            sr.color = plasma ? new Color(1f, 0.6f, 1f) : new Color(0.5f, 1f, 1f);
+            bool own = _bulletColor.a > 0; // naves premium: balas de color propio
+            sr.color = own ? Color.Lerp(_bulletColor, Color.white, 0.35f) : plasma ? new Color(1f, 0.6f, 1f) : new Color(0.5f, 1f, 1f);
             sr.sortingOrder = 5;
             var glow = new GameObject("Glow").AddComponent<SpriteRenderer>();
             glow.transform.SetParent(go.transform, false);
-            glow.transform.localScale = Vector3.one * 3f;
+            glow.transform.localScale = Vector3.one * (own ? 3.4f : 3f);
             glow.sprite = SpriteFactory.Glow;
-            glow.color = plasma ? new Color(1f, 0.3f, 0.9f, 0.65f) : new Color(0.3f, 0.8f, 1f, 0.6f);
+            glow.color = own ? new Color(_bulletColor.r, _bulletColor.g, _bulletColor.b, 0.7f)
+                : plasma ? new Color(1f, 0.3f, 0.9f, 0.65f) : new Color(0.3f, 0.8f, 1f, 0.6f);
             glow.sortingOrder = 4;
             _projectiles.Add(new Projectile { tr = go.transform, vel = vel, pierce = pierce });
         }
@@ -644,7 +825,7 @@ namespace AeroBlitz
                 for (int j = _obstacles.Count - 1; j >= 0 && !remove; j--)
                 {
                     var o = _obstacles[j];
-                    if (!Overlaps(o, pos, 0.15f)) continue;
+                    if (o.type == ObstacleType.BossShot || !Overlaps(o, pos, 0.15f)) continue;
                     if (p.hits != null && p.hits.Contains(o)) continue;
                     // El plasma atraviesa obstáculos rompibles; contra los indestructibles se deshace
                     if (o.destructible && p.pierce > 0) { p.pierce--; (p.hits ??= new HashSet<Obstacle>()).Add(o); }
@@ -670,6 +851,8 @@ namespace AeroBlitz
                     }
                 }
 
+                if (!remove && BossHitByProjectile(p, pos)) remove = true;
+
                 if (remove) { Destroy(p.tr.gameObject); _projectiles.RemoveAt(i); }
             }
         }
@@ -677,7 +860,7 @@ namespace AeroBlitz
         // ---------------- MONEDAS Y MEJORAS TEMPORALES ----------------
         void SetupPickups(int level)
         {
-            PickupsEnabled = level >= GameConfig.PickupsFromLevel;
+            PickupsEnabled = level >= GameConfig.PickupsFromLevel || BossCatalog.IsBossLevel(level);
             RunCoins = 0; RunCoinPickups = 0; TempShieldTime = 0; OverchargeTime = 0; MagnetTime = 0;
             TrialCannonTier = 0; TrialProductId = null; _trialPending = false;
             Weapon.ChargeRateMultiplier = 1f;
@@ -721,7 +904,7 @@ namespace AeroBlitz
         void UpdatePickupSpawns(float dt)
         {
             if (_trialPending && _time >= _trialAt) { _trialPending = false; SpawnTrial(_trialProduct); }
-            if (_time >= _cfg.duration - 3f) return; // no aparecen justo al final
+            if (!_cfg.boss && _time >= _cfg.duration - 3f) return; // no aparecen justo al final
             _coinTimer -= dt;
             if (_coinTimer <= 0)
             {
@@ -823,7 +1006,7 @@ namespace AeroBlitz
             if (TempShieldTime > 0) TempShieldTime = Mathf.Max(0f, TempShieldTime - dt);
             if (OverchargeTime > 0) OverchargeTime = Mathf.Max(0f, OverchargeTime - dt);
             if (MagnetTime > 0) MagnetTime = Mathf.Max(0f, MagnetTime - dt);
-            Weapon.ChargeRateMultiplier = OverchargeTime > 0 ? OverchargeMultiplier() : 1f;
+            Weapon.ChargeRateMultiplier = (BossActive ? GameConfig.BossChargeBoost : 1f) * (OverchargeTime > 0 ? OverchargeMultiplier() : 1f);
         }
 
         /// <summary>
@@ -917,7 +1100,7 @@ namespace AeroBlitz
             float bestD = float.MaxValue, bestTakenD = float.MaxValue;
             foreach (var o in _obstacles)
             {
-                if (o.type == ObstacleType.LaserGate || o.tr.position.y < ship.y - 0.5f || o.tr.position.y > _halfH + 0.5f) continue;
+                if (o.type == ObstacleType.LaserGate || o.type == ObstacleType.BossShot || o.tr.position.y < ship.y - 0.5f || o.tr.position.y > _halfH + 0.5f) continue;
                 float d = ((Vector2)o.tr.position - ship).sqrMagnitude;
                 bool taken = _missiles.Exists(m => m.target == o);
                 if (!taken && d < bestD) { best = o; bestD = d; }
@@ -943,20 +1126,22 @@ namespace AeroBlitz
             {
                 var m = _missiles[i];
                 m.life -= dt;
-                if (m.target == null || !_obstacles.Contains(m.target)) m.target = FindMissileTarget();
+                bool atBoss = BossTargetable;
+                if (!atBoss && (m.target == null || !_obstacles.Contains(m.target))) m.target = FindMissileTarget();
                 Vector2 pos = m.tr.position;
                 float speed = Mathf.Min(15f, m.vel.magnitude + 14f * dt);
-                Vector2 desired = m.target != null ? ((Vector2)m.target.tr.position - pos).normalized : Vector2.up;
+                Vector2 desired = atBoss ? (BossPosition - pos).normalized : m.target != null ? ((Vector2)m.target.tr.position - pos).normalized : Vector2.up;
                 m.vel = (Vector2)Vector3.RotateTowards(m.vel.normalized, desired, 7f * dt, 0f) * speed;
                 pos += m.vel * dt;
                 m.tr.position = pos;
                 m.tr.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(m.vel.x, m.vel.y) * Mathf.Rad2Deg);
 
                 bool remove = m.life <= 0f || Mathf.Abs(pos.y) > _halfH + 2f || Mathf.Abs(pos.x) > _halfW + 2f;
+                if (!remove && BossHitByMissile(pos)) remove = true;
                 for (int j = _obstacles.Count - 1; j >= 0 && !remove; j--)
                 {
                     var o = _obstacles[j];
-                    if (o.type == ObstacleType.LaserGate || !Overlaps(o, pos, 0.3f)) continue;
+                    if (o.type == ObstacleType.LaserGate || o.type == ObstacleType.BossShot || !Overlaps(o, pos, 0.3f)) continue;
                     // El misil destruye cualquier obstáculo de un golpe, incluidos muros y minas
                     Destroyed++;
                     KillPoints += o.destructible ? LevelDatabase.PointsForDestroying(o.type) : 40;
@@ -982,7 +1167,7 @@ namespace AeroBlitz
                     var go = new GameObject("Particle");
                     go.transform.SetParent(_world);
                     p = new Particle { tr = go.transform, sr = go.AddComponent<SpriteRenderer>() };
-                    p.sr.sprite = SpriteFactory.White;
+                    p.sr.sprite = SpriteFactory.Circle; // chispas redondas (antes cuadrados)
                     p.sr.sortingOrder = 15;
                 }
                 p.tr.position = pos;

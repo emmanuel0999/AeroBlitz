@@ -45,7 +45,7 @@ FEATURES
 • Ships, upgrades and equipment.
 • World and country leaderboards.
 • English, Spanish and French.
-• 3 lives that refill over time.
+• 5 lives that refill over time (or 1 video = 1 life).
 
 Aero Blitz is free to play. It contains ads and optional in-app purchases (coins, lives, ships, equipment, remove ads and a VIP subscription). No purchase is needed to finish the game.
 

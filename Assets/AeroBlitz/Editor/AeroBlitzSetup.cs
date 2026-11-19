@@ -17,13 +17,13 @@ namespace AeroBlitz.EditorTools
         {
             PlayerSettings.productName = "Aero Blitz";
             PlayerSettings.companyName = CompanyName;
-            PlayerSettings.bundleVersion = "1.0.1"; // versión visible en la tienda; súbela en cada actualización
+            PlayerSettings.bundleVersion = "1.1.0"; // versión visible en la tienda; súbela en cada actualización (1.0.2 = misiones; 1.0.3 = naves nuevas, menú nuevo, 5 vidas; 1.1.0 = jefes, Ruta Galáctica, tutorial)
             PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Android, BundleId);
             PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.iOS, BundleId);
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
             // Cada archivo que subas a Google Play necesita un número de versión MAYOR que el anterior.
-            // Última subida: 12 (AeroBlitz-v12.aab, 1.0.1). La próxima es la 13. Sube este mínimo en cada nueva versión.
-            const int MinVersionCode = 13;
+            // Última generada: 16 (AeroBlitz-v16.aab, 1.0.3: lo de la 15 + iconos en todas las pantallas y gráficos más nítidos). La próxima es la 17. Sube este mínimo en cada nueva versión.
+            const int MinVersionCode = 17;
             if (PlayerSettings.Android.bundleVersionCode < MinVersionCode)
                 PlayerSettings.Android.bundleVersionCode = MinVersionCode;
             PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);

@@ -24,9 +24,12 @@ namespace AeroBlitz
             _globalTab.GetComponent<RectTransform>().Place(0.03f, 0.85f, 0.495f, 0.915f);
             _countryTab = UIFactory.Button(Root, L.T("rank.by_country"), Palette.PanelLight, () => { _byCountry = true; Load(); }, 40);
             _countryTab.GetComponent<RectTransform>().Place(0.505f, 0.85f, 0.97f, 0.915f);
+            _globalTab.SetIcon("icon_globe");
+            _countryTab.SetIcon("icon_flag");
 
             _countryBtn = UIFactory.Button(Root, "", Palette.PanelLight, PickCountry, 36);
             _countryBtn.GetComponent<RectTransform>().Place(0.03f, 0.785f, 0.97f, 0.84f);
+            _countryBtn.SetIcon("icon_flag");
 
             _status = UIFactory.Label(Root, "", 28, Palette.TextDim);
             _status.rectTransform.Place(0.03f, 0.755f, 0.97f, 0.785f);
@@ -45,11 +48,13 @@ namespace AeroBlitz
             mine.rectTransform.Place(0.03f, 0.02f, 0.97f, 0.09f);
             _mine = UIFactory.Label(mine.transform, "", 36, Palette.Gold, TextAnchor.MiddleCenter, true);
             _mine.rectTransform.Stretch();
+            UIKit.LabelIcon(_mine, "icon_user", 50);
         }
 
-        static void Cols(RectTransform row, string a, string b, string c, string d, Color color, bool bold)
+        static Text Cols(RectTransform row, string a, string b, string c, string d, Color color, bool bold)
         {
-            UIFactory.Label(row, a, 34, color, TextAnchor.MiddleCenter, bold).rectTransform.Place(0, 0, 0.11f, 1);
+            var rank = UIFactory.Label(row, a, 34, color, TextAnchor.MiddleCenter, bold);
+            rank.rectTransform.Place(0, 0, 0.11f, 1);
             var pilot = UIFactory.Label(row, b, 34, color, TextAnchor.MiddleLeft, bold);
             pilot.rectTransform.Place(0.11f, 0, 0.45f, 1, 10, 0, 10, 0);
             Fit(pilot, 34, 22);
@@ -58,6 +63,7 @@ namespace AeroBlitz
             country.rectTransform.Place(0.45f, 0, 0.76f, 1, 14, 6, 14, 6);
             Fit(country, 30, 18);
             UIFactory.Label(row, d, 34, color, TextAnchor.MiddleRight, bold).rectTransform.Place(0.76f, 0, 1, 1, 0, 0, 20, 0);
+            return rank;
         }
 
         /// <summary>Ajusta el tamaño de la letra para que el texto quepa entero en su celda, sin cortarse.</summary>
@@ -82,7 +88,7 @@ namespace AeroBlitz
 
         void PickCountry()
         {
-            UIManager.Instance.Dialog(L.T("rank.choose_country"), null, (p, close) =>
+            UIManager.Instance.IconDialog("icon_flag", L.T("rank.choose_country"), null, (p, close) =>
             {
                 var area = UIFactory.Rect("Area", p);
                 area.Pref(1000);
@@ -113,7 +119,12 @@ namespace AeroBlitz
                     var bg = UIFactory.Image(_content, e.isMe ? new Color(0.3f, 0.22f, 0.05f) : Palette.Panel, true, "Row");
                     bg.Pref(84);
                     Color c = e.rank == 1 ? Palette.Gold : e.rank == 2 ? new Color(0.8f, 0.85f, 0.95f) : e.rank == 3 ? new Color(0.85f, 0.55f, 0.3f) : Palette.Text;
-                    Cols(bg.rectTransform, e.rank.ToString(), e.name, Countries.NameOf(e.country), UIFactory.Fmt(e.points), e.isMe ? Palette.Gold : c, e.rank <= 3 || e.isMe);
+                    var rankText = Cols(bg.rectTransform, e.rank.ToString(), e.name, Countries.NameOf(e.country), UIFactory.Fmt(e.points), e.isMe ? Palette.Gold : c, e.rank <= 3 || e.isMe);
+                    if (e.rank <= 3) // medallas de oro, plata y bronce
+                    {
+                        rankText.text = "";
+                        UIKit.Icon(bg.transform, "medal_" + e.rank).rectTransform.Place(0.01f, 0.06f, 0.1f, 0.94f);
+                    }
                 }
                 if (list.Count == 0) UIFactory.Label(_content, L.T("rank.empty_country"), 34, Palette.TextDim).Pref(120);
                 _scroll.verticalNormalizedPosition = 1f; // empezar arriba (puesto #1)

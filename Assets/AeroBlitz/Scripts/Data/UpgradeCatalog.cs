@@ -39,6 +39,15 @@ namespace AeroBlitz
         public bool missiles;              // habilita el botón de misiles
     }
 
+    public class TrailDefinition
+    {
+        public string id;
+        public string Name => L.T("trail." + id);
+        public Color color;     // tinte del fuego ("default" usa el fuego naranja original)
+        public bool rare;       // estela rara (cofre épico)
+        public bool animated;   // cambia de color (arcoíris)
+    }
+
     public class PaintDefinition
     {
         public string id;
@@ -82,21 +91,40 @@ namespace AeroBlitz
 
         public static readonly List<PaintDefinition> Paints = new List<PaintDefinition>
         {
+            // Todas las pinturas se compran con monedas (salvo la Estándar y las exclusivas de misiones y racha)
             new PaintDefinition { id = "default", color = new Color(0.85f, 0.9f, 1f), priceType = PriceType.Free },
-            new PaintDefinition { id = "red", color = new Color(1f, 0.35f, 0.35f), priceType = PriceType.Free },
-            new PaintDefinition { id = "green", color = new Color(0.4f, 1f, 0.5f), priceType = PriceType.Free },
+            new PaintDefinition { id = "red", color = new Color(1f, 0.35f, 0.35f), priceType = PriceType.Coins, coinPrice = 200 },
+            new PaintDefinition { id = "green", color = new Color(0.4f, 1f, 0.5f), priceType = PriceType.Coins, coinPrice = 200 },
             new PaintDefinition { id = "cyan", color = new Color(0.3f, 0.95f, 1f), priceType = PriceType.Coins, coinPrice = 300 },
             new PaintDefinition { id = "orange", color = new Color(1f, 0.6f, 0.2f), priceType = PriceType.Coins, coinPrice = 300 },
             new PaintDefinition { id = "purple", color = new Color(0.7f, 0.45f, 1f), priceType = PriceType.Coins, coinPrice = 500 },
-            new PaintDefinition { id = "gold", color = new Color(1f, 0.84f, 0.25f), priceType = PriceType.RealMoney, productId = ProductIds.PaintGold },
+            new PaintDefinition { id = "gold", color = new Color(1f, 0.84f, 0.25f), priceType = PriceType.Coins, coinPrice = 8000, productId = ProductIds.PaintGold }, // productId: restaura compras antiguas
             // Exclusivas: solo se ganan con la misión semanal (orden en Missions.ExclusivePaints)
             new PaintDefinition { id = "neon", color = new Color(1f, 0.3f, 0.85f), priceType = PriceType.Mission },
             new PaintDefinition { id = "toxic", color = new Color(0.7f, 1f, 0.1f), priceType = PriceType.Mission },
             new PaintDefinition { id = "midnight", color = new Color(0.35f, 0.42f, 1f), priceType = PriceType.Mission },
             new PaintDefinition { id = "ruby", color = new Color(0.9f, 0.1f, 0.32f), priceType = PriceType.Mission },
+            // Solo se ganan el día 5 de la racha diaria (orden en DailyStreak.StreakPaints)
+            new PaintDefinition { id = "carbon", color = new Color(0.4f, 0.42f, 0.48f), priceType = PriceType.Streak },
+            new PaintDefinition { id = "sakura", color = new Color(1f, 0.62f, 0.78f), priceType = PriceType.Streak },
+            new PaintDefinition { id = "mint", color = new Color(0.55f, 1f, 0.82f), priceType = PriceType.Streak },
         };
 
         public static PaintDefinition GetPaint(string id) => Paints.Find(x => x.id == id) ?? Paints[0];
+
+        /// <summary>Estelas (color del fuego del motor). Solo salen en cofres: las normales en el raro, las raras en el épico.</summary>
+        public static readonly List<TrailDefinition> Trails = new List<TrailDefinition>
+        {
+            new TrailDefinition { id = "default", color = Color.white },
+            new TrailDefinition { id = "blue", color = new Color(0.35f, 0.75f, 1f) },
+            new TrailDefinition { id = "green", color = new Color(0.45f, 1f, 0.35f) },
+            new TrailDefinition { id = "pink", color = new Color(1f, 0.4f, 0.85f) },
+            new TrailDefinition { id = "white", color = new Color(0.92f, 0.96f, 1f) },
+            new TrailDefinition { id = "gold", color = new Color(1f, 0.82f, 0.25f), rare = true },
+            new TrailDefinition { id = "rainbow", color = new Color(1f, 0.4f, 0.4f), rare = true, animated = true },
+        };
+
+        public static TrailDefinition GetTrail(string id) => Trails.Find(x => x.id == id) ?? Trails[0];
         public static PaintDefinition PaintByProduct(string pid) => Paints.Find(x => x.productId == pid);
     }
 }

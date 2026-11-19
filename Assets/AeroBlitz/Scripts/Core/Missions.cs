@@ -126,6 +126,14 @@ namespace AeroBlitz
             return def != null && s.progress >= def.target;
         }
 
+        public static int ClaimableCount(PlayerData d)
+        {
+            Ensure(d);
+            int n = 0;
+            foreach (var s in States(d)) if (!s.claimed && IsComplete(s)) n++;
+            return n;
+        }
+
         public static bool HasClaimable(PlayerData d)
         {
             Ensure(d);
@@ -154,7 +162,7 @@ namespace AeroBlitz
                     var paint = NextExclusivePaint(d);
                     return paint != null
                         ? L.T("mis.rw_weekly_fmt", paint.Name, UIFactory.Fmt(def.amount))
-                        : L.T("mis.rw_coins_fmt", UIFactory.Fmt(def.amount + GameConfig.WeeklyAllPaintsBonus));
+                        : L.T("mis.rw_weekly_coins_fmt", UIFactory.Fmt(def.amount + GameConfig.WeeklyAllPaintsBonus));
             }
         }
 
@@ -176,7 +184,8 @@ namespace AeroBlitz
                     lines.Add(L.T("toast.plus_life"));
                     break;
                 case MissionReward.Chest:
-                    lines.AddRange(OpenChest(d));
+                    Chests.Add(d, ChestTier.Common); // se abre con animación al reclamar (GameManager.ClaimMission)
+                    lines.Add(L.T("chest.earned_fmt", Chests.Name(ChestTier.Common)));
                     break;
                 case MissionReward.WeeklyPaint:
                     var paint = NextExclusivePaint(d);
@@ -188,40 +197,9 @@ namespace AeroBlitz
                     }
                     d.coins += coins;
                     lines.Add(L.T("toast.coins_fmt", UIFactory.Fmt(coins)));
+                    Chests.Add(d, ChestTier.Epic);
+                    lines.Add(L.T("chest.earned_fmt", Chests.Name(ChestTier.Epic)));
                     break;
-            }
-            return lines;
-        }
-
-        /// <summary>Cofre: siempre monedas, y con suerte una vida y/o una mejora gratis para la nave en uso.</summary>
-        static List<string> OpenChest(PlayerData d)
-        {
-            var lines = new List<string>();
-            int coins = Mathf.RoundToInt(UnityEngine.Random.Range(GameConfig.ChestCoinsMin, GameConfig.ChestCoinsMax + 1) / 10f) * 10;
-            d.coins += coins;
-            lines.Add(L.T("toast.coins_fmt", coins));
-
-            if (UnityEngine.Random.value < GameConfig.ChestLifeChance)
-            {
-                d.lives = Mathf.Min(GameConfig.MaxLives, d.lives + 1);
-                lines.Add(L.T("toast.plus_life"));
-            }
-
-            if (UnityEngine.Random.value < GameConfig.ChestUpgradeChance)
-            {
-                var ship = d.SelectedShipState;
-                var options = UpgradeCatalog.Stats.FindAll(st => ship.GetUpgrade(st.stat) < st.MaxLevel);
-                if (options.Count > 0)
-                {
-                    var st = options[UnityEngine.Random.Range(0, options.Count)];
-                    ship.SetUpgrade(st.stat, ship.GetUpgrade(st.stat) + 1);
-                    lines.Add(L.T("chest.upgrade_fmt", st.Name, ShipCatalog.Get(ship.shipId).Name));
-                }
-                else
-                {
-                    d.coins += GameConfig.ChestUpgradeFallbackCoins; // la nave ya tiene todo al máximo
-                    lines.Add(L.T("toast.coins_fmt", GameConfig.ChestUpgradeFallbackCoins));
-                }
             }
             return lines;
         }

@@ -1,5 +1,26 @@
 # Video promocional de Aero Blitz
 
+## Tráiler de la versión 1.0.3 (actual)
+**Videos:** `trailer_v17_en.mp4` (inglés, para la ficha de Google Play y YouTube) y `trailer_v17_es.mp4` (español, para redes). 1920x1080, 30 fps, 27,4 s.
+
+| Segundos | Escena | Rótulo (en / es) |
+|---|---|---|
+| 0–3,4 | Tormenta del nivel 70 con el Fénix | CAN YOU SURVIVE 70 EXTREME LEVELS? / ¿PUEDES SOBREVIVIR A 70 NIVELES EXTREMOS? |
+| 3,4–6 | Juego: cargar y disparar (Nova) | CHARGE. FIRE. SURVIVE. / CARGA. DISPARA. SOBREVIVE. |
+| 6–8,6 | Misiles del Titán | MISSILES THAT SMASH WALLS / MISILES QUE ROMPEN MUROS |
+| 8,6–10,3 | Cañón de plasma | PLASMA CANNONS / CAÑONES DE PLASMA |
+| 10,3–13,3 | Las 11 naves apareciendo | 11 SHIPS TO COLLECT / 11 NAVES PARA COLECCIONAR |
+| 13,3–16,3 | 6 mundos en cortes rápidos | 10 WORLDS + nombre del mundo |
+| 16,3–18,9 | Tormenta de asteroides (nivel 60) | ASTEROID STORMS / TORMENTAS DE ASTEROIDES |
+| 18,9–20,6 | Misiones | DAILY MISSIONS / MISIONES DIARIAS |
+| 20,6–22,7 | Cofre épico abriéndose | EPIC CHESTS / COFRES ÉPICOS |
+| 22,7–24,4 | Podio del ranking | CLIMB THE WORLD RANKING / SUBE EN EL RANKING MUNDIAL |
+| 24,4–27,4 | Icono, logo y llamada | FREE ON GOOGLE PLAY / GRATIS EN GOOGLE PLAY |
+
+- **Música:** `musica_trailer_v17.wav`, electrónica a 140 bpm compuesta por código en `herramientas/trailer_v17_musica.py` (sin samples, loops ni grabaciones de terceros: es música propia, sin derechos de autor ajenos). Sin voz.
+- **Cómo rehacerlo:** las tomas se grabaron con una build temporal de Windows (fotogramas JPG a 30 fps en `D:/Temp/trailercap/takes`). Montaje: `herramientas/trailer_v17.ps1 -Lang en` (o `es`); qué tramo de cada toma se usa: `trailer_v17_eleccion.ps1`. Codificador: `herramientas/framegrab/FramesToVideo.exe`.
+
+## Tráiler anterior (1.0.0-1.0.2)
 **Video final:** `trailer_aero_blitz.mp4` (1920x1080, 29,4 s, en inglés, con voz y música).
 **Miniatura para YouTube:** `miniatura_youtube.png` (1280x720).
 

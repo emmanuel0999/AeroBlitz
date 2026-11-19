@@ -41,6 +41,7 @@ namespace AeroBlitz
         public string Description => L.T("prod." + Key + ".desc");
         public string fallbackPrice; // se muestra si la tienda aún no devolvió el precio localizado
         public string category;
+        public bool hidden;          // ya no se vende (sigue registrado para restaurar compras antiguas)
     }
 
     public static class ProductCatalog
@@ -72,7 +73,8 @@ namespace AeroBlitz
             new ProductDefinition { id = ProductIds.EqTripleCannon, kind = ProductKind.NonConsumable, category = CatEquipment, fallbackPrice = "US$2.99" },
             new ProductDefinition { id = ProductIds.EqPlasmaCannon, kind = ProductKind.NonConsumable, category = CatEquipment, fallbackPrice = "US$3.99" },
             new ProductDefinition { id = ProductIds.EqMissiles, kind = ProductKind.NonConsumable, category = CatEquipment, fallbackPrice = "US$3.99" },
-            new ProductDefinition { id = ProductIds.PaintGold, kind = ProductKind.NonConsumable, category = CatEquipment, fallbackPrice = "US$0.99" },
+            // La pintura Oro ahora se compra con monedas: el producto queda oculto solo para restaurar compras antiguas
+            new ProductDefinition { id = ProductIds.PaintGold, kind = ProductKind.NonConsumable, category = CatEquipment, fallbackPrice = "US$0.99", hidden = true },
         };
 
         public static ProductDefinition Get(string id) => All.Find(p => p.id == id);
@@ -97,7 +99,12 @@ namespace AeroBlitz
                 case ProductIds.VipMonthly: d.vip = true; break;
                 default:
                     var ship = ShipCatalog.ByProduct(productId);
-                    if (ship != null) { d.AddShip(ship.id); break; }
+                    if (ship != null)
+                    {
+                        d.AddShip(ship.id);
+                        if (d.IsTempShip(ship.id)) { d.tempShipId = ""; d.tempShipUntilTicks = 0; d.tempShipPrevSelected = ""; } // compró la de prueba: ya es suya
+                        break;
+                    }
                     var eq = UpgradeCatalog.EquipmentByProduct(productId);
                     if (eq != null) { if (!d.ownedEquipment.Contains(eq.id)) d.ownedEquipment.Add(eq.id); break; }
                     var paint = UpgradeCatalog.PaintByProduct(productId);

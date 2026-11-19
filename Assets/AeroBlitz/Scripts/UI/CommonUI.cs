@@ -18,23 +18,35 @@ namespace AeroBlitz
             bg.rectTransform.Place(0, 0.925f, 1, 1);
             if (onBack != null)
             {
-                var back = UIFactory.Button(bg.transform, "<", Palette.PanelLight, () => onBack(), 56);
+                var back = UIFactory.Button(bg.transform, "", Palette.PanelLight, () => onBack(), 56);
                 back.GetComponent<RectTransform>().Place(0, 0, 0, 1, 16, 14, 0, 14).sizeDelta = new Vector2(120, -28);
                 back.GetComponent<RectTransform>().anchoredPosition = new Vector2(76, 0);
+                UIKit.Icon(back.transform, "icon_chevron_left").rectTransform.Stretch(22);
             }
             var t = UIFactory.Label(bg.transform, title, 50, Palette.Text, TextAnchor.MiddleLeft, true);
-            t.rectTransform.Place(0, 0, 0.5f, 1, onBack != null ? 160 : 30, 0, 0, 0);
-            bar._coins = UIFactory.Label(bg.transform, "", 40, Palette.Gold, TextAnchor.MiddleRight, true);
-            bar._coins.rectTransform.Place(0.45f, 0, 0.78f, 1);
-            bar._lives = UIFactory.Label(bg.transform, "", 40, new Color(1f, 0.45f, 0.5f), TextAnchor.MiddleRight, true);
-            bar._lives.rectTransform.Place(0.78f, 0, 1f, 1, 0, 0, 24, 0);
+            t.rectTransform.Place(0, 0, 0.47f, 1, onBack != null ? 160 : 30, 0, 0, 0);
+            t.resizeTextForBestFit = true; t.resizeTextMinSize = 26; t.resizeTextMaxSize = 50;
+            // Monedas y vidas con sus iconos, como en el menú principal
+            bar._coins = Chip(bg.transform, "icon_coin", 0.48f, 0.76f, Palette.Gold);
+            bar._lives = Chip(bg.transform, "icon_heart", 0.78f, 0.98f, new Color(1f, 0.6f, 0.65f));
             return bar;
+        }
+
+        static Text Chip(Transform parent, string icon, float x0, float x1, Color color)
+        {
+            var chip = UIKit.Panel(parent, UIKit.PanelDark, UIKit.Border, "Chip");
+            chip.rectTransform.Place(x0, 0.16f, x1, 0.84f);
+            UIKit.Icon(chip.transform, icon).rectTransform.Place(0.04f, 0.12f, 0.3f, 0.88f);
+            var t = UIFactory.Label(chip.transform, "", 38, color, TextAnchor.MiddleCenter, true);
+            t.rectTransform.Place(0.3f, 0, 1, 1, 4, 0, 10, 0);
+            t.resizeTextForBestFit = true; t.resizeTextMinSize = 20; t.resizeTextMaxSize = 38;
+            return t;
         }
 
         public void Refresh(PlayerData d)
         {
-            _coins.text = "$ " + UIFactory.Fmt(d.coins);
-            _lives.text = L.T("lives_fmt", d.lives);
+            _coins.text = UIFactory.Fmt(d.coins);
+            _lives.text = d.lives.ToString();
         }
     }
 
@@ -125,26 +137,39 @@ namespace AeroBlitz
 
     public static class ShipUI
     {
-        /// <summary>Imagen de la nave con cabina, tintada con su pintura.</summary>
+        /// <summary>Imagen de la nave: casco (teñido), detalles o brillo neón, y cabina.</summary>
         public static Image ShipImage(Transform parent, ShipState state, float size)
         {
             var def = ShipCatalog.Get(state != null ? state.shipId : ShipCatalog.StarterShipId);
-            var img = UIFactory.Image(parent, state != null ? UpgradeCatalog.GetPaint(state.paintId).color : Color.white, false, "Ship");
-            img.sprite = SpriteFactory.Ship(def);
+            var img = UIFactory.Image(parent, Color.white, false, "Ship");
             img.preserveAspect = true;
             img.rectTransform.sizeDelta = new Vector2(size, size);
+            var detail = UIFactory.Image(img.transform, Color.white, false, "Detail");
+            detail.preserveAspect = true;
+            detail.rectTransform.Stretch();
             var cockpit = UIFactory.Image(img.transform, Color.white, false, "Cockpit");
             cockpit.sprite = SpriteFactory.Cockpit;
+            cockpit.preserveAspect = true;
             cockpit.rectTransform.anchorMin = cockpit.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            cockpit.rectTransform.sizeDelta = new Vector2(size * 0.25f, size * 0.25f);
-            cockpit.rectTransform.anchoredPosition = new Vector2(0, size * 0.06f);
+            cockpit.rectTransform.sizeDelta = new Vector2(size * 0.172f, size * 0.172f); // 0,22 de 1,28 unidades
+            UpdateShipImage(img, state, def);
             return img;
         }
 
+        /// <summary>state null = nave que aún no tiene: se muestra con su aspecto de serie (las premium, metálicas).</summary>
         public static void UpdateShipImage(Image img, ShipState state, ShipDefinition def)
         {
-            img.sprite = SpriteFactory.Ship(def);
-            img.color = state != null ? UpgradeCatalog.GetPaint(state.paintId).color : new Color(0.5f, 0.55f, 0.65f);
+            var look = ShipLook.Of(def, state);
+            img.sprite = look.hull;
+            img.color = look.hullColor;
+            var detail = img.transform.Find("Detail")?.GetComponent<Image>();
+            if (detail != null) { detail.sprite = look.detail; detail.color = look.detailColor; }
+            var cockpit = img.transform.Find("Cockpit") as RectTransform;
+            if (cockpit != null)
+            {
+                float size = img.rectTransform.sizeDelta.x;
+                cockpit.anchoredPosition = new Vector2(0, def.cockpitY * SpriteFactory.ShipScale * size / 2f);
+            }
         }
     }
 }

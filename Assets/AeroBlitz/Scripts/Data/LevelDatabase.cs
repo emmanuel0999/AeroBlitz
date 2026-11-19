@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AeroBlitz
 {
-    public enum ObstacleType { SmallAsteroid, BigAsteroid, Drone, MetalWall, Mine, LaserGate }
+    public enum ObstacleType { SmallAsteroid, BigAsteroid, Drone, MetalWall, Mine, LaserGate, BossShot }
 
     public class LevelConfig
     {
@@ -16,6 +16,7 @@ namespace AeroBlitz
         public bool allowDrones, allowMines, allowLaserGates, allowBigAsteroids;
         public int basePoints;
         public int baseCoins;
+        public bool boss;                 // nivel de jefe (10, 20 ... 70): termina al derrotarlo, no por tiempo
         public string titleKey;
         public string Title => L.T(titleKey, level);
     }
@@ -57,13 +58,22 @@ namespace AeroBlitz
                 c.obstacleSpeed = Mathf.Lerp(3.8f, 8.2f, t) * (storm ? 1.1f : 1f);
                 c.spawnInterval = Mathf.Lerp(1.25f, 0.42f, Mathf.Pow(t, 0.8f)) * (storm ? 0.85f : 1f);
                 c.destructibleRatio = Mathf.Lerp(0.65f, 0.45f, t);
-                c.damageMultiplier = Mathf.Lerp(1f, 1.7f, t);
+                c.damageMultiplier = Mathf.Lerp(1f, 1.2f, t); // nivel 70: x1,2 (asteroide pequeño 12, grande 20, dron 18)
                 c.maxPerWave = level < 15 ? 2 : level < 35 ? 3 : 4;
                 c.allowBigAsteroids = true;
                 c.allowDrones = level >= 8;
                 c.allowMines = level >= 12;
                 c.allowLaserGates = level >= 18;
                 c.titleKey = storm ? "lvl.storm" : Sector(level);
+            }
+
+            var boss = BossCatalog.ForLevel(level);
+            if (boss != null)
+            {
+                c.boss = true;
+                c.titleKey = boss.nameKey;
+                c.allowBigAsteroids = c.allowDrones = c.allowMines = true;
+                c.allowLaserGates = false;
             }
 
             c.basePoints = 100 + level * 25 + (level > GameConfig.EasyLevels ? level * level : 0);
@@ -83,11 +93,12 @@ namespace AeroBlitz
             switch (t)
             {
                 case ObstacleType.SmallAsteroid: return 10f;
-                case ObstacleType.BigAsteroid: return 22f;
+                case ObstacleType.BigAsteroid: return 50f / 3f; // 20 de daño en el nivel 70
                 case ObstacleType.Drone: return 15f;
                 case ObstacleType.MetalWall: return 28f;
                 case ObstacleType.Mine: return 40f;
                 case ObstacleType.LaserGate: return 32f;
+                case ObstacleType.BossShot: return 0f; // el daño real depende de la vida de la nave: GameConfig.BossShotDamageFor
             }
             return 10f;
         }
