@@ -1,0 +1,9 @@
+﻿Huge update!
+• 7 epic boss battles added at levels 10, 20, 30, 40, 50, 60 and 70
+• Every boss has 3 combat phases and a powerful fury mode
+• New Galactic Route shows your progress across all 10 worlds
+• Already past those levels? Challenge the bosses you missed and earn bonus rewards
+• Sharper graphics and visual improvements throughout the game
+• Indestructible obstacles deal less damage from level 25 onward
+• New quick tutorial for new pilots
+• Added "Rate the Game" button in Settings

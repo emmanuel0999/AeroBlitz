@@ -19,10 +19,13 @@ namespace AeroBlitz
     /// </summary>
     public static partial class SpriteFactory
     {
-        public const int BossRes = 896;
-        const float BossScale = 0.92f;
+        public const int BossRes = 1024;
+        /// <summary>El contorno ocupa este fracción de la imagen; el resto es margen para el resplandor (así no se corta en el borde).</summary>
+        const float BossScale = 0.78f;
+        /// <summary>Proporción del ancho del jefe (BossDefinition.width) que mide el contorno en el mundo.</summary>
+        const float BossWorldFill = 0.92f;
         /// <summary>Súbelo si cambia el dibujo de los jefes: así se descartan las imágenes guardadas en el teléfono.</summary>
-        const int BossArtVersion = 3;
+        const int BossArtVersion = 4;
 
         class BossJob { public Color32[] px; public byte[] png; }
         static readonly Dictionary<string, Task<BossJob>> BossJobs = new Dictionary<string, Task<BossJob>>();
@@ -85,7 +88,7 @@ namespace AeroBlitz
                     t.Apply(true, true);
                 }
                 t.filterMode = FilterMode.Bilinear; t.wrapMode = TextureWrapMode.Clamp; t.mipMapBias = -0.5f;
-                Cache[key] = Sprite.Create(t, new Rect(0, 0, BossRes, BossRes), new Vector2(0.5f, 0.5f), BossRes / d.width, 0, SpriteMeshType.FullRect);
+                Cache[key] = Sprite.Create(t, new Rect(0, 0, BossRes, BossRes), new Vector2(0.5f, 0.5f), BossRes / (d.width * BossWorldFill / BossScale), 0, SpriteMeshType.FullRect);
             }
             return true;
         }
@@ -188,7 +191,7 @@ namespace AeroBlitz
             const float inkIn = 0.024f, inkOut = 0.03f;     // contorno: un poco por dentro y por fuera de cada pieza
             const float bevelW = 0.075f;                     // ancho del canto biselado
             const float panelDepth = 0.11f;                  // línea de panel paralela al borde
-            const float glowReach = 0.32f;                   // más allá, el resplandor ya no se ve
+            const float glowReach = 0.3f;                    // más allá, el resplandor ya no se ve
             var lightDir = new Vector2(-0.55f, 0.84f);       // luz desde arriba a la izquierda (en pantalla)
 
             int np = d.parts.Length, nl = d.lightParts.Length;
@@ -245,7 +248,7 @@ namespace AeroBlitz
                     if (lights)
                     {
                         float a = 0f, hot = 0f;
-                        if (unionSd > 0) a = 0.5f * Mathf.Exp(-unionSd / 0.05f);                           // resplandor alrededor del jefe
+                        if (unionSd > 0) a = 0.5f * Mathf.Exp(-unionSd / 0.05f) * Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((1f / BossScale - Mathf.Max(Mathf.Abs(p.x), Mathf.Abs(p.y))) / 0.08f)); // resplandor, que se apaga antes del borde
                         else a = Cov(0.014f - Mathf.Abs(unionSd + 0.055f), pw) * 0.9f;                       // línea luminosa junto al borde
                         for (int i = 0; i < nl; i++)
                         {
@@ -254,7 +257,7 @@ namespace AeroBlitz
                             float sd = PartSd(q, lp.pts);
                             float inside = Cov(-sd, pw);
                             if (inside > a) a = inside;
-                            if (sd > 0) a = Mathf.Max(a, 0.75f * Mathf.Exp(-sd / 0.04f));                    // halo de la luz
+                            if (sd > 0) a = Mathf.Max(a, 0.75f * Mathf.Exp(-sd / 0.04f) * Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((1f / BossScale - Mathf.Max(Mathf.Abs(p.x), Mathf.Abs(p.y))) / 0.08f))); // halo de la luz
                             if (sd < 0 && lp.radius > 0) hot = Mathf.Max(hot, Mathf.SmoothStep(0.3f, 0.85f, -sd / lp.radius) * inside);
                         }
                         if (a > 0.003f)

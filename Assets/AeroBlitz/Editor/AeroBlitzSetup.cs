@@ -23,7 +23,7 @@ namespace AeroBlitz.EditorTools
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
             // Cada archivo que subas a Google Play necesita un número de versión MAYOR que el anterior.
             // Última generada: 16 (AeroBlitz-v16.aab, 1.0.3: lo de la 15 + iconos en todas las pantallas y gráficos más nítidos). La próxima es la 17. Sube este mínimo en cada nueva versión.
-            const int MinVersionCode = 17;
+            const int MinVersionCode = 18;
             if (PlayerSettings.Android.bundleVersionCode < MinVersionCode)
                 PlayerSettings.Android.bundleVersionCode = MinVersionCode;
             PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);

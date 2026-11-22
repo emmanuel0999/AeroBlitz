@@ -189,8 +189,8 @@ namespace AeroBlitz
             b.hull.color = Color.Lerp(b.def.hull, Color.white, flash);
             var acc = Color.Lerp(b.def.accent, new Color(1f, 0.2f, 0.15f), fury * 0.6f);
             float pulse = 0.75f + Mathf.Sin(b.t * (4f + fury * 6f)) * 0.25f;
-            b.lights.color = new Color(1f, 1f - fury * 0.45f, 1f - fury * 0.5f, 0.82f + pulse * 0.18f);
-            b.core.color = new Color(acc.r, acc.g, acc.b, 0.25f + pulse * 0.25f);
+            b.lights.color = new Color(1f, 1f, 1f, 0.82f + pulse * 0.18f); // el color ya viene en el dibujo
+            b.core.color = new Color(acc.r, acc.g, acc.b, 0.25f + pulse * 0.25f + fury * 0.2f);
             b.core.transform.localScale = Vector3.one * (1.0f + Mathf.Sin(b.t * (5f + fury * 7f)) * 0.15f);
         }
 
